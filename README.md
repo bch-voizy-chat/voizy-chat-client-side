@@ -17,6 +17,9 @@ Inside a cloned directory/folder, run:
 
 ```bash
 npm install
+npm install axios
+npm install react-router-dom
+npm install react-bootstrap bootstrap
 ```
 
 ## Author & Acknowledgment
