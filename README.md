@@ -29,7 +29,7 @@ Team Lead: Alfonso Ortiz Palma Junco
 - GitHub [@aortizpalma](//github.com/aortizpalma)
 - [LinkedIn](//www.linkedin.com/in/ortizpalma/)
 
-Back End Lead: Keshmiry Alireza
+Back End Lead: Alireza Keshmiry
 
 - GitHub [@ark13da](//github.com/ark13da)
 - [LinkedIn](//www.linkedin.com/in/alireza-keshmiry-63193979/)
