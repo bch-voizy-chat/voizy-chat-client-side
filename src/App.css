@@ -1,0 +1,5 @@
+/* for dev purpose */
+.comment,
+.thread {
+	border: 1px solid;
+}
