@@ -16,6 +16,7 @@ const Main = () => {
 				<Route exact path='/' component={Home} />
 				<Route exact path='/login' component={Login} />
 				<Route exact path='/signup' component={Signup} />
+
 				<Route exact path='/new' component={NewAudio} />
 				<Route exact path='/conversation/:id' component={SingleThread} />
 				<Route path='/about' component={About} />
