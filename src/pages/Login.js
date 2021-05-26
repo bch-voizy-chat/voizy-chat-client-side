@@ -8,7 +8,7 @@ const Login = () => {
 	return (
 		<div
 			className='flow d-flex flex-column justify-content-center mx-auto'
-			style={{ minHeight: "80vh", maxWidth: "320px" }}
+			style={{ minHeight: "85vh", maxWidth: "320px" }}
 		>
 			<h2 className='text-center'>Log in:</h2>
 			<Form className='flow form-flow'>
@@ -28,7 +28,7 @@ const Login = () => {
 			<p className='w-100 text-center'>
 				Don't have an account?
 				<br />
-				<Link to='/signup'>Sign up here.</Link>
+				<Link to='/signup'>Sign up here</Link>
 			</p>
 		</div>
 	);
