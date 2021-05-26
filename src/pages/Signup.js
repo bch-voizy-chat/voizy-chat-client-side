@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 
 const Signup = () => {
@@ -32,7 +33,7 @@ const Signup = () => {
 			<p className='w-100 text-center'>
 				Already have an account?
 				<br />
-				Log in here.
+				<Link to='/login'>Log in here.</Link>
 			</p>
 		</div>
 	);
