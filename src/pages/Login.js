@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 
 const Login = () => {
@@ -9,7 +10,7 @@ const Login = () => {
 			className='flow d-flex flex-column justify-content-center mx-auto'
 			style={{ minHeight: "80vh", maxWidth: "320px" }}
 		>
-			<h2 className='text-center'>Login:</h2>
+			<h2 className='text-center'>Log in:</h2>
 			<Form className='flow form-flow'>
 				<Form.Group id='email'>
 					<Form.Label>Email</Form.Label>
@@ -21,13 +22,13 @@ const Login = () => {
 				</Form.Group>
 
 				<Button type='submit' className='w-100 mt-3'>
-					Create Account
+					Log In
 				</Button>
 			</Form>
 			<p className='w-100 text-center'>
 				Don't have an account?
 				<br />
-				Create one here.
+				<Link to='/signup'>Sign up here.</Link>
 			</p>
 		</div>
 	);
