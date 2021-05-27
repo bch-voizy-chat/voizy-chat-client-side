@@ -15,13 +15,11 @@ const Signup = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setIsLoading(true);
-		/* 		let resp = await signup(
+		let resp = await signup(
 			emailRef.current.value,
 			passwordRef.current.value,
 			usernameRef.current.value
-		); */
-
-		let resp = false;
+		);
 		setIsLoading(false);
 		resp
 			? setAccountError(resp)
