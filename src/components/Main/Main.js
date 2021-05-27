@@ -8,6 +8,7 @@ import NewAudio from "../../pages/NewAudio";
 import PageNotFound from "../../pages/PageNotFound";
 import Signup from "../../pages/Signup";
 import SingleThread from "../../pages/SingleThread";
+import PrivateRoute from "./PrivateRoute";
 
 const Main = () => {
 	return (
@@ -16,7 +17,7 @@ const Main = () => {
 				<Route exact path='/' component={Home} />
 				<Route exact path='/login' component={Login} />
 				<Route exact path='/signup' component={Signup} />
-				<Route exact path='/new' component={NewAudio} />
+				<PrivateRoute exact path='/new' component={NewAudio} />
 				<Route exact path='/conversation/:id' component={SingleThread} />
 				<Route path='/about' component={About} />
 				<Route path='*' component={PageNotFound} />
