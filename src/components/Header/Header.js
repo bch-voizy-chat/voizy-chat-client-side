@@ -1,16 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { Button, Navbar, Nav } from "react-bootstrap";
+import { useAuth } from "../../contexts/AuthContext";
+
+import logo from "../../assets/Logo-white-png-tinified.png";
 
 const Header = () => {
-	/**for dev purpose */
-	let currentUser = true;
+	const [expanded, setExpanded] = useState(false);
+	const { logout, isLoggedIn } = useAuth();
+	const logoutHandler = () => {
+		logout();
+		window.location.reload();
+	};
 
 	return (
-		<header className='d-flex justify-content-between'>
-			<div className='logo'>
-				<h1 className='visually-hidden'>Voizy Chat</h1>
-				<img src='none' alt='Voizy chat logo.' />
-			</div>
-			{currentUser ? <div>User icon</div> : <div>Log in/Register</div>}
+		<header>
+			<Navbar collapseOnSelect expand='lg' expanded={expanded}>
+				<Navbar.Brand>
+					<NavLink to='/' onClick={() => setExpanded(false)}>
+						<h1 className='visually-hidden'>Voizy Chat</h1>
+						<img src={logo} alt='Voizy Logo' />
+					</NavLink>
+				</Navbar.Brand>
+				<Navbar.Toggle
+					aria-controls='responsive-navbar-nav'
+					onClick={() => setExpanded(expanded ? false : "expanded")}
+				/>
+				<Navbar.Collapse id='responsive-navbar-nav'>
+					{isLoggedIn ? (
+						<Button
+							type='button'
+							className='nav-link'
+							variant='link'
+							onClick={logoutHandler}
+						>
+							Log Out
+						</Button>
+					) : (
+						<Nav className='mr-auto '>
+							<NavLink
+								to='/login'
+								className='nav-link'
+								onClick={() => setExpanded(false)}
+							>
+								Log In
+							</NavLink>
+							<NavLink
+								to='/signup'
+								className='nav-link'
+								onClick={() => setExpanded(false)}
+							>
+								Sign Up
+							</NavLink>
+						</Nav>
+					)}
+				</Navbar.Collapse>
+			</Navbar>
 		</header>
 	);
 };

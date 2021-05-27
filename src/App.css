@@ -3,3 +3,12 @@
 .thread {
 	border: 1px solid;
 }
+
+.form-flow {
+	--flow-space: 1rem;
+}
+
+.form-control:focus {
+	border-color: var(--color-orange);
+	box-shadow: var(--box-shadow-outline);
+}

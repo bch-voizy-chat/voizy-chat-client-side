@@ -1,3 +1,9 @@
+:root {
+	--color-orange: #fe9200;
+	--color-purple: #200b5d;
+	--box-shadow-outline: 0 0 0.1rem 0.2rem rgba(254, 144, 0, 0.8);
+}
+
 body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -6,8 +12,18 @@ body {
 	position: relative;
 }
 
+h2,
+h3,
+p {
+	color: var(--color-purple);
+}
+
 p {
 	line-height: 1.5;
+}
+
+header {
+	background-color: var(--color-orange);
 }
 
 main {
@@ -37,6 +53,11 @@ img {
 	position: absolute;
 	white-space: nowrap;
 	width: 1px;
+}
+
+/* Flow CSS utility; add a class of flow to an element which will then add margin-top to sibling elements within that element. Where --flow-space is not defined: the default value is 1.5rem. */
+.flow > * + * {
+	margin-top: var(--flow-space, 1.5rem);
 }
 
 /* Remove _all_ animations and transitions for people that prefer not to see them */
