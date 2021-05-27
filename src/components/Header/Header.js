@@ -7,8 +7,7 @@ import logo from "../../assets/Logo-white-png-tinified.png";
 
 const Header = () => {
 	const [expanded, setExpanded] = useState(false);
-	const { logout, currentUser } = useAuth();
-	const userLoggedIn = Object.keys(currentUser).length;
+	const { logout, isLoggedIn } = useAuth();
 	const logoutHandler = () => {
 		logout();
 		window.location.reload();
@@ -28,7 +27,7 @@ const Header = () => {
 					onClick={() => setExpanded(expanded ? false : "expanded")}
 				/>
 				<Navbar.Collapse id='responsive-navbar-nav'>
-					{userLoggedIn ? (
+					{isLoggedIn ? (
 						<Button
 							type='button'
 							className='nav-link'

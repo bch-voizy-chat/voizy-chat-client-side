@@ -20,10 +20,7 @@ const Home = () => {
 				Start a thread
 			</Link>
 			<p>
-				All threads;{" "}
-				{userLoggedIn
-					? currentUser.username + " is logged in"
-					: "No users logged in"}
+				All threads; {userLoggedIn ? "User is logged in" : "No users logged in"}
 			</p>
 
 			{threadList}

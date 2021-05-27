@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import * as Cookies from "js-cookie";
 import axios from "axios";
 
@@ -9,6 +9,7 @@ const setUserCookie = (user) => {
 
 const getUserCookie = () => {
 	const userCookie = Cookies.get("user");
+	console.log("getting cookie");
 
 	if (userCookie === undefined) {
 		return {};
@@ -25,6 +26,12 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
 	const [currentUser, setCurrentUser] = useState(getUserCookie());
+	const [isLoggedIn, setIsLoggedIn] = useState(0);
+
+	useEffect(
+		() => setIsLoggedIn(Object.keys(currentUser).length),
+		[currentUser]
+	);
 
 	const signup = (email, password, username) => {
 		const data = {
@@ -94,11 +101,11 @@ export function AuthProvider({ children }) {
 
 	const logout = () => {
 		Cookies.remove("user");
-		console.log("logout");
 	};
 
 	const value = {
 		currentUser,
+		isLoggedIn,
 		signup,
 		login,
 		logout,
