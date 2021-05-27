@@ -12,7 +12,12 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 				return userLoggedIn ? (
 					<Component {...props} />
 				) : (
-					<Redirect to='/login' />
+					<Redirect
+						to={{
+							pathname: "/login",
+							state: { message: "user not logged in", status: 400 },
+						}}
+					/>
 				);
 			}}
 		></Route>

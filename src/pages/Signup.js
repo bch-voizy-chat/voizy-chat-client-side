@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -8,20 +8,27 @@ const Signup = () => {
 	const passwordRef = useRef();
 	const usernameRef = useRef();
 	const { signup } = useAuth();
+	const history = useHistory();
 	const [isLoading, setIsLoading] = useState(false);
-	const [accountCreated, setAccountCreated] = useState(false);
 	const [accountError, setAccountError] = useState("");
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setIsLoading(true);
-		let resp = await signup(
+		/* 		let resp = await signup(
 			emailRef.current.value,
 			passwordRef.current.value,
 			usernameRef.current.value
-		);
+		); */
+
+		let resp = false;
 		setIsLoading(false);
-		resp ? setAccountError(resp) : setAccountCreated(true);
+		resp
+			? setAccountError(resp)
+			: history.push("/login", {
+					message: "successful signup",
+					status: 200,
+			  });
 	};
 
 	return (
@@ -47,14 +54,6 @@ const Signup = () => {
 					{isLoading ? "Loading…" : "Create Account"}
 				</Button>
 			</Form>
-			{accountCreated && (
-				<Alert variant='success' className='mb-0'>
-					Your account has been successfully created.{" "}
-					<Link to='/login' className='alert-link'>
-						Go to log in.
-					</Link>
-				</Alert>
-			)}
 			{accountError && (
 				<Alert variant='danger' className='mb-0'>
 					Oops! {accountError}
