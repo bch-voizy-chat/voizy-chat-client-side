@@ -25,7 +25,7 @@ const Signup = () => {
 	return (
 		<div
 			className='flow d-flex flex-column mx-auto pt-5'
-			style={{ minHeight: "85vh", maxWidth: "320px" }}
+			style={{ maxWidth: "320px" }}
 		>
 			<h2 className='text-center'>Create a new account:</h2>
 			<Form className='flow form-flow' onSubmit={handleSubmit}>

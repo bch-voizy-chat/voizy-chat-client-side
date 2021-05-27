@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 import Thread from "../components/Main/Thread";
 
 const Home = () => {
+	const { currentUser } = useAuth();
+	const userLoggedIn = Object.keys(currentUser).length;
 	/** [1,2,3] for dev purpose */
 	const [thread, setThreads] = useState([1, 2, 3]);
 
@@ -12,7 +15,13 @@ const Home = () => {
 
 	return (
 		<div>
-			<p>All threads</p>
+			<p>
+				All threads;{" "}
+				{userLoggedIn
+					? currentUser.username + " is logged in"
+					: "No users logged in"}
+			</p>
+
 			{threadList}
 		</div>
 	);
