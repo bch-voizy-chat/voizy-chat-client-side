@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 
 const Signup = () => {
@@ -8,24 +8,23 @@ const Signup = () => {
 	const passwordRef = useRef();
 	const usernameRef = useRef();
 	const { signup } = useAuth();
+	const [accountCreated, setAccountCreated] = useState(false);
+	const [accountError, setAccountError] = useState("");
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		try {
-			await signup(
-				emailRef.current.value,
-				passwordRef.current.value,
-				usernameRef.current.value
-			);
-		} catch (err) {
-			console.error(err);
-		}
+		let resp = await signup(
+			emailRef.current.value,
+			passwordRef.current.value,
+			usernameRef.current.value
+		);
+		resp ? setAccountError(resp) : setAccountCreated(true);
 	};
 
 	return (
 		<div
-			className='flow d-flex flex-column justify-content-center mx-auto'
+			className='flow d-flex flex-column mx-auto pt-5'
 			style={{ minHeight: "85vh", maxWidth: "320px" }}
 		>
 			<h2 className='text-center'>Create a new account:</h2>
@@ -46,6 +45,19 @@ const Signup = () => {
 					Create Account
 				</Button>
 			</Form>
+			{accountCreated && (
+				<Alert variant='success' className='mb-0'>
+					Your account has been successfully created.{" "}
+					<Link to='/login' className='alert-link'>
+						Go to log in.
+					</Link>
+				</Alert>
+			)}
+			{accountError && (
+				<Alert variant='danger' className='mb-0'>
+					Oops! {accountError}
+				</Alert>
+			)}
 			<p className='w-100 text-center'>
 				Already have an account?
 				<br />
