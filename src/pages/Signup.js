@@ -8,17 +8,19 @@ const Signup = () => {
 	const passwordRef = useRef();
 	const usernameRef = useRef();
 	const { signup } = useAuth();
+	const [isLoading, setIsLoading] = useState(false);
 	const [accountCreated, setAccountCreated] = useState(false);
 	const [accountError, setAccountError] = useState("");
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
+		setIsLoading(true);
 		let resp = await signup(
 			emailRef.current.value,
 			passwordRef.current.value,
 			usernameRef.current.value
 		);
+		setIsLoading(false);
 		resp ? setAccountError(resp) : setAccountCreated(true);
 	};
 
@@ -41,8 +43,8 @@ const Signup = () => {
 					<Form.Label>Username</Form.Label>
 					<Form.Control type='username' ref={usernameRef} required />
 				</Form.Group>
-				<Button type='submit' className='w-100 mt-3'>
-					Create Account
+				<Button type='submit' disabled={isLoading} className='w-100 mt-3'>
+					{isLoading ? "Loading…" : "Create Account"}
 				</Button>
 			</Form>
 			{accountCreated && (
