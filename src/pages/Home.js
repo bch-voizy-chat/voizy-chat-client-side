@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 import Thread from "../components/Main/Thread";
 
@@ -15,6 +16,9 @@ const Home = () => {
 
 	return (
 		<div>
+			<Link to='/new' className='btn--link-newAudio'>
+				Start a thread
+			</Link>
 			<p>
 				All threads;{" "}
 				{userLoggedIn
