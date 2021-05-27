@@ -6,6 +6,7 @@ import { useAuth } from "../contexts/AuthContext";
 const Login = () => {
 	const emailRef = useRef();
 	const passwordRef = useRef();
+	const [isLoading, setIsLoading] = useState(false);
 	const [loginError, setLoginError] = useState("");
 	const history = useHistory();
 	const { login } = useAuth();
@@ -13,7 +14,9 @@ const Login = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		setIsLoading(true);
 		let resp = await login(emailRef.current.value, passwordRef.current.value);
+		setIsLoading(false);
 		resp ? setLoginError(resp) : history.push("/");
 	};
 
@@ -33,8 +36,8 @@ const Login = () => {
 					<Form.Control type='password' ref={passwordRef} required />
 				</Form.Group>
 
-				<Button type='submit' className='w-100 mt-3'>
-					Log In
+				<Button type='submit' disabled={isLoading} className='w-100 mt-3'>
+					{isLoading ? "Loading…" : "Log In"}
 				</Button>
 			</Form>
 			{loginError && (
