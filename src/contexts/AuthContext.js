@@ -33,17 +33,20 @@ export function AuthProvider({ children }) {
 			username: username,
 		};
 		/** server signup url */
-		const url = "";
+		const url =
+			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/signup";
 
 		return axios
 			.post(url, data)
-			.then(() => {
+			.then((res) => {
+				console.log(res);
 				return "";
 			})
 			.catch((err) => {
+				console.log(err.response);
 				if (err.response) {
 					// client received an error response (5xx, 4xx)
-					return "Account/username exists already.";
+					return err.response.data.message;
 				} else if (err.request) {
 					// client never received a response, or request never left
 					return "An error occured! Server cannot be reached.";
@@ -55,30 +58,30 @@ export function AuthProvider({ children }) {
 	};
 
 	const login = (email, password) => {
-		const params = {
+		const data = {
 			email: email,
 			password: password,
 		};
 		/** server login url */
-		const url = "https://randomuser.me/api/";
+		const url =
+			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/login";
 
 		return axios
-			.get(url, { params })
-			.then((resp) => {
-				// for dev purpose
+			.post(url, data)
+			.then((res) => {
 				let user = {
-					email: resp.data.results[0].email,
-					password: resp.data.results[0].login.password,
-					username: resp.data.results[0].login.username,
+					email: res.data.email,
+					password: res.data.password,
 				};
 				setUserCookie(user);
 				setCurrentUser(user);
 				return "";
 			})
 			.catch((err) => {
+				console.log(err.response);
 				if (err.response) {
 					// client received an error response (5xx, 4xx)
-					return "An error occured!";
+					return err.response.data.message;
 				} else if (err.request) {
 					// client never received a response, or request never left
 					return "An error occured! Server cannot be reached.";
