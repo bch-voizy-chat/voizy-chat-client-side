@@ -26,12 +26,12 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
 	const [currentUser, setCurrentUser] = useState(getUserCookie());
-	const [isLoggedIn, setIsLoggedIn] = useState(0);
+	const [isLoggedIn, setIsLoggedIn] = useState(1);
 
-	useEffect(
+	/* 	useEffect(
 		() => setIsLoggedIn(Object.keys(currentUser).length),
 		[currentUser]
-	);
+	); */
 
 	const signup = (email, password, username) => {
 		const data = {

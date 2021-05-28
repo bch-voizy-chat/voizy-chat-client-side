@@ -11,7 +11,7 @@ const Thread = ({ thread }) => {
 		like ? setLike(false) : setLike(true);
 	};
 
-	let likeBtnClass = `btn-text squishy thread-icon thread-icon--like ${
+	let likeBtnClass = `d-flex align-items-center btn-text squishy thread__icon thread__icon--like ${
 		like && "liked"
 	}`;
 
@@ -20,15 +20,15 @@ const Thread = ({ thread }) => {
 		<article className='thread'>
 			<h2 className='audio__title'>Audio {thread}</h2>
 			<AudioPlayer />
-			<div className='d-flex justify-content-between'>
+			<div className='d-flex justify-content-between thread__icon-container'>
 				<Link
-					className='d-flex justify-content-center align-items-center comment-link thread-icon thread-icon--comment squishy'
+					className='d-flex align-items-center  comment-link thread__icon thread__icon--comment squishy'
 					to={`/conversation/${thread}`}
 				>
 					22<span className='visually-hidden'>comments. Comment</span>
 				</Link>
 				<button
-					className='btn-text squishy thread-icon thread-icon--share'
+					className='btn-text squishy thread__icon thread__icon--share'
 					onClick={shareHandler}
 				>
 					<span className='visually-hidden'>Share</span>

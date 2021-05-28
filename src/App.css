@@ -1,90 +1,12 @@
 /* for dev purpose */
-.comment,
-.thread {
+.comment {
 	border: 1px solid;
-}
-
-/* Log In / Sign Up page*/
-
-.form-flow {
-	--flow-space: 1rem;
-}
-
-/* Home page */
-
-.new-audio-link {
-	z-index: 100;
-	background-color: white;
-	position: absolute;
-	right: 3%;
-	bottom: 3%;
-	border-radius: 50%;
-	border: 1px solid #eee;
-	box-shadow: 0 5px 5px 1px rgba(0, 0, 0, 0.25);
-}
-
-.new-audio-link:focus {
-	outline: none;
-	box-shadow: 0 0 0 4px var(--color-purple);
-}
-
-.new-audio-link__add-icon {
-	stroke: var(--color-orange);
-	stroke-width: 5;
-	height: 60px;
-	width: 60px;
-	padding: 15px;
-	border-radius: 50%;
-}
-
-.thread {
-	padding: 2% 5%;
-}
-
-.thread-icon {
-	min-width: 50px;
-	height: 3rem;
-}
-
-.thread-icon::before {
-	display: inline-block;
-	vertical-align: middle;
-	content: "";
-	width: 2rem;
-	height: 1.8rem;
-	margin-right: 0.5rem;
-	background-repeat: no-repeat;
-	background-size: contain;
-}
-
-.comment-link {
-	display: flex;
-
-	align-items: center;
-}
-
-.thread-icon--comment::before {
-	background-image: url("./assets/icons/comment.png");
-}
-
-.thread-icon--share::before {
-	width: 1.5rem;
-	margin-right: 0;
-	background-image: url("./assets/icons/share.png");
-}
-
-.thread-icon--like::before {
-	background-image: url("./assets/icons/like.png");
-}
-
-.liked::before {
-	background-image: url("./assets/icons/like--active.png");
 }
 
 /* Bootstrap overides */
 
 .form-control:focus {
-	border-color: var(--color-orange);
+	border-color: var(--color-purple);
 	box-shadow: var(--box-shadow-outline);
 }
 .navbar-light .navbar-toggler {
@@ -98,4 +20,148 @@
 	background-image: url("./assets/icons/user.png");
 	width: 40px;
 	height: 42px;
+}
+
+.btn-primary,
+.btn-primary:active,
+.btn-primary:hover,
+.btn-primary:focus {
+	background-color: var(--color-orange);
+	border-color: var(--color-orange);
+}
+
+.btn-primary:focus {
+	/* border-color: var(--color-purple); */
+	box-shadow: var(--box-shadow-outline);
+}
+
+/* Nav */
+
+.voizy-nav-link {
+	display: inline-block;
+	margin-top: 1rem;
+	font-size: 1.5rem;
+	color: white;
+	text-decoration: none;
+	text-align: center;
+}
+
+.voizy-nav-link:active {
+	color: white;
+}
+
+.voizy-nav-link:hover {
+	color: white;
+	opacity: 0.9;
+}
+
+.voizy-nav-link:last-child {
+	margin-bottom: 1rem;
+}
+
+/* Log In / Sign Up page*/
+
+.form-flow {
+	--flow-space: 1rem;
+}
+
+/* Home page */
+
+.new-audio-link {
+	z-index: 100;
+	background-color: white;
+	position: fixed;
+	right: 3%;
+	bottom: 3%;
+	border-radius: 50%;
+	border: 1px solid #eee;
+	box-shadow: 0 5px 5px 1px rgba(0, 0, 0, 0.25);
+}
+
+.new-audio-link:focus {
+	outline: none;
+	box-shadow: 0 0 0 0.2rem var(--color-purple);
+}
+
+.new-audio-link__add-icon {
+	stroke: var(--color-orange);
+	stroke-width: 5;
+	height: 60px;
+	width: 60px;
+	padding: 15px;
+	border-radius: 50%;
+}
+
+.thread {
+	padding-top: 2rem;
+	border-bottom: 0.2rem solid #eee;
+}
+
+.thread > * {
+	padding: 0 5%;
+}
+
+.thread__icon {
+	min-width: 80px;
+	height: 3rem;
+}
+
+.thread__icon::before {
+	display: inline-block;
+	vertical-align: middle;
+	content: "";
+	width: 2rem;
+	height: 1.8rem;
+	margin-right: 0.5rem;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.thread__icon-container {
+	border-top: 0.1rem solid #eee;
+}
+
+.thread__icon--comment::before {
+	background-image: url("./assets/icons/comment.png");
+}
+
+.thread__icon--share::before {
+	width: 1.5rem;
+	background-image: url("./assets/icons/share.png");
+}
+
+.thread__icon--like::before {
+	background-image: url("./assets/icons/like.png");
+}
+
+.comment-link,
+.thread__icon--like {
+	text-align: left;
+	color: var(--color-orange);
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.comment-link:hover {
+	color: var(--color-orange);
+}
+
+.liked::before {
+	background-image: url("./assets/icons/like--active.png");
+}
+
+/* UserAccount */
+
+.detail__container {
+	border: 1px solid var(--color-orange);
+}
+
+.detail__container > p {
+	margin: 0.5rem auto;
+}
+
+@media (min-width: 992px) {
+	.navbar-collapse {
+		justify-content: flex-end;
+	}
 }
