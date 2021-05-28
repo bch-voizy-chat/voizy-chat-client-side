@@ -60,6 +60,11 @@ img {
 	margin-top: var(--flow-space, 1.5rem);
 }
 
+/** Make buttons and similar components responsive*/
+.squishy:active {
+	transform: scale(0.95);
+}
+
 /* Remove _all_ animations and transitions for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
 	body {
