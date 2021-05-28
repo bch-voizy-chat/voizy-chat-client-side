@@ -24,6 +24,8 @@ const Login = (props) => {
 				return (
 					<Alert variant='warning'>You must be logged in to continue.</Alert>
 				);
+			default:
+				return;
 		}
 	};
 

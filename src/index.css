@@ -65,6 +65,16 @@ img {
 	transform: scale(0.95);
 }
 
+.btn-text {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
 /* Remove _all_ animations and transitions for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
 	body {

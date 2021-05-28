@@ -37,6 +37,50 @@
 	border-radius: 50%;
 }
 
+.thread {
+	padding: 2% 5%;
+}
+
+.thread-icon {
+	min-width: 50px;
+	height: 3rem;
+}
+
+.thread-icon::before {
+	display: inline-block;
+	vertical-align: middle;
+	content: "";
+	width: 2rem;
+	height: 1.8rem;
+	margin-right: 0.5rem;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.comment-link {
+	display: flex;
+
+	align-items: center;
+}
+
+.thread-icon--comment::before {
+	background-image: url("./assets/icons/comment.png");
+}
+
+.thread-icon--share::before {
+	width: 1.5rem;
+	margin-right: 0;
+	background-image: url("./assets/icons/share.png");
+}
+
+.thread-icon--like::before {
+	background-image: url("./assets/icons/like.png");
+}
+
+.liked::before {
+	background-image: url("./assets/icons/like--active.png");
+}
+
 /* Bootstrap overides */
 
 .form-control:focus {

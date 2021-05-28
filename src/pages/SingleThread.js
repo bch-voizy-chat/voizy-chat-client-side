@@ -8,7 +8,7 @@ const SingleThread = () => {
 	const [comments, setComments] = useState([1, 2, 3]);
 
 	const commentList = comments.map((comment) => {
-		return <Comment comment={comment} />;
+		return <Comment key={comment} comment={comment} />;
 	});
 
 	return (
