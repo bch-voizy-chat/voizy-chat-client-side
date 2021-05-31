@@ -1,7 +1,8 @@
 :root {
 	--color-orange: #fe9200;
+	--color-purple: rgba(31, 11, 91, 0.502);
 	--color-purple: #200b5d;
-	--box-shadow-outline: 0 0 0.1rem 0.2rem rgba(254, 144, 0, 0.8);
+	--box-shadow-outline: 0 0 0.1rem 0.2rem rgba(31, 11, 91, 0.8);
 }
 
 body {
@@ -10,24 +11,28 @@ body {
 	scroll-behavior: smooth;
 	min-height: 100vh;
 	position: relative;
-}
-
-h2,
-h3,
-p {
 	color: var(--color-purple);
 }
 
-p {
+a {
+	color: var(--color-purple);
+	font-weight: bold;
+}
+
+p,
+a,
+li {
 	line-height: 1.5;
 }
 
 header {
 	background-color: var(--color-orange);
+	padding: 0 2%;
+	padding-top: 2rem;
 }
 
 main {
-	padding-bottom: 2.5rem; /* Footer height */
+	padding-bottom: 5rem; /* Footer height */
 }
 
 footer {
@@ -58,6 +63,33 @@ img {
 /* Flow CSS utility; add a class of flow to an element which will then add margin-top to sibling elements within that element. Where --flow-space is not defined: the default value is 1.5rem. */
 .flow > * + * {
 	margin-top: var(--flow-space, 1.5rem);
+}
+
+/** Make buttons and similar components responsive*/
+.squishy:active {
+	transform: scale(0.95);
+}
+
+.btn-text {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+:focus {
+	outline: 0.2rem solid var(--color-purple);
+}
+
+.focus-visible-only:focus {
+	outline: none;
+}
+
+.focus-visible-only:focus-visible {
+	outline: 0.2rem solid var(--color-purple);
 }
 
 /* Remove _all_ animations and transitions for people that prefer not to see them */

@@ -24,6 +24,8 @@ const Login = (props) => {
 				return (
 					<Alert variant='warning'>You must be logged in to continue.</Alert>
 				);
+			default:
+				return;
 		}
 	};
 
@@ -53,7 +55,11 @@ const Login = (props) => {
 					<Form.Control type='password' ref={passwordRef} required />
 				</Form.Group>
 
-				<Button type='submit' disabled={isLoading} className='w-100 mt-3'>
+				<Button
+					type='submit'
+					disabled={isLoading}
+					className='squishy w-100 mt-3'
+				>
 					{isLoading ? "Loading…" : "Log In"}
 				</Button>
 			</Form>

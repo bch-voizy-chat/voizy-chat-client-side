@@ -48,7 +48,11 @@ const Signup = () => {
 					<Form.Label>Username</Form.Label>
 					<Form.Control type='username' ref={usernameRef} required />
 				</Form.Group>
-				<Button type='submit' disabled={isLoading} className='w-100 mt-3'>
+				<Button
+					type='submit'
+					disabled={isLoading}
+					className='squishy w-100 mt-3'
+				>
 					{isLoading ? "Loading…" : "Create Account"}
 				</Button>
 			</Form>

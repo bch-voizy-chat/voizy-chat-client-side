@@ -8,22 +8,42 @@ const Home = () => {
 	const { currentUser } = useAuth();
 	const userLoggedIn = Object.keys(currentUser).length;
 	/** [1,2,3] for dev purpose */
-	const [thread, setThreads] = useState([1, 2, 3]);
+	const [threads, setThreads] = useState([1, 2, 3]);
 
-	const threadList = thread.map((thread) => {
-		return <Thread thread={thread} />;
+	const threadList = threads.map((thread) => {
+		return <Thread key={thread} thread={thread} />;
 	});
 
 	return (
 		<div>
-			<Link to='/new' className='btn--link-newAudio'>
-				Start a thread
+			<Link
+				to={{
+					pathname: "/new",
+					state: { message: "new thread", status: 0 },
+				}}
+				className='squishy new-audio-link'
+				title='Start a conversation.'
+			>
+				<svg
+					role='img'
+					version='1.1'
+					className='new-audio-link__add-icon'
+					xmlns='http://www.w3.org/2000/svg'
+					x='0px'
+					y='0px'
+					viewBox='0 0 60 60'
+				>
+					<title>New audio icon</title>
+					<line x1='30' y1='5' x2='30' y2='55' />
+					<line x1='5' y1='30' x2='55' y2='30' />
+				</svg>
 			</Link>
+
 			<p>
 				All threads; {userLoggedIn ? "User is logged in" : "No users logged in"}
 			</p>
 
-			{threadList}
+			<section>{threadList}</section>
 		</div>
 	);
 };

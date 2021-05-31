@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Button, Navbar, Nav } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
 
 import logo from "../../assets/Logo-white-png-tinified.png";
@@ -17,7 +17,11 @@ const Header = () => {
 		<header>
 			<Navbar collapseOnSelect expand='lg' expanded={expanded}>
 				<Navbar.Brand>
-					<NavLink to='/' onClick={() => setExpanded(false)}>
+					<NavLink
+						to='/'
+						className='focus-visible-only'
+						onClick={() => setExpanded(false)}
+					>
 						<h1 className='visually-hidden'>Voizy Chat</h1>
 						<img src={logo} alt='Voizy Logo' />
 					</NavLink>
@@ -27,33 +31,43 @@ const Header = () => {
 					onClick={() => setExpanded(expanded ? false : "expanded")}
 				/>
 				<Navbar.Collapse id='responsive-navbar-nav'>
-					{isLoggedIn ? (
-						<Button
-							type='button'
-							className='nav-link'
-							variant='link'
-							onClick={logoutHandler}
-						>
-							Log Out
-						</Button>
-					) : (
-						<Nav className='mr-auto '>
-							<NavLink
-								to='/login'
-								className='nav-link'
-								onClick={() => setExpanded(false)}
-							>
-								Log In
-							</NavLink>
-							<NavLink
-								to='/signup'
-								className='nav-link'
-								onClick={() => setExpanded(false)}
-							>
-								Sign Up
-							</NavLink>
-						</Nav>
-					)}
+					<Nav className='mr-auto'>
+						{isLoggedIn ? (
+							<>
+								<NavLink
+									to='/account'
+									className='voizy-nav-link focus-visible-only'
+									onClick={() => setExpanded(false)}
+								>
+									Account
+								</NavLink>
+								<button
+									type='button'
+									className='btn-text voizy-nav-link focus-visible-only '
+									onClick={logoutHandler}
+								>
+									Log Out
+								</button>
+							</>
+						) : (
+							<>
+								<NavLink
+									to='/login'
+									className='voizy-nav-link focus-visible-only'
+									onClick={() => setExpanded(false)}
+								>
+									Log In
+								</NavLink>
+								<NavLink
+									to='/signup'
+									className='voizy-nav-link focus-visible-only'
+									onClick={() => setExpanded(false)}
+								>
+									Sign Up
+								</NavLink>
+							</>
+						)}
+					</Nav>
 				</Navbar.Collapse>
 			</Navbar>
 		</header>
