@@ -17,8 +17,15 @@ const Comment = ({ response }) => {
 
 	const [like, setLike] = useState(false);
 	const likeHandler = () => {
-		console.log("like!");
-		like ? setLike(false) : setLike(true);
+		if (like) {
+			setLike(false);
+			setLikeCount(likeCount - 1);
+			/** Post update: likeCount + if user liked the post. */
+		} else {
+			setLike(true);
+			setLikeCount(likeCount + 1);
+			/** Post update */
+		}
 	};
 
 	let likeBtnClass = `d-flex align-items-center btn-text squishy thread__icon thread__icon--like ${

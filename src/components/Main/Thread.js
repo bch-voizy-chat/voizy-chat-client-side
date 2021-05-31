@@ -87,7 +87,7 @@ const Thread = ({ thread }) => {
 					<span className='visually-hidden'>comments. Comment</span>
 				</Link>
 				<button
-					className='btn-text squishy thread__icon thread__icon--share'
+					className='btn-text squishy mobile-only thread__icon thread__icon--share'
 					onClick={shareHandler}
 				>
 					<span className='visually-hidden'>Share</span>
