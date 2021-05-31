@@ -19,11 +19,12 @@ const UserAccount = () => {
 				<div className='detail__container'>
 					<p>Username</p>
 				</div>
-				<p class='text-danger'>
+				<Button disabled className='squishy w-100'>
+					Edit Account
+				</Button>
+				<p class='text-danger w-75 mx-auto'>
 					This information can’t be edited for the time being.
 				</p>
-
-				<Button className='w-100'>Edit Account</Button>
 			</section>
 		</div>
 	);

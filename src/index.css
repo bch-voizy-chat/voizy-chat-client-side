@@ -11,15 +11,17 @@ body {
 	scroll-behavior: smooth;
 	min-height: 100vh;
 	position: relative;
-}
-
-h2,
-h3,
-p {
 	color: var(--color-purple);
 }
 
-p {
+a {
+	color: var(--color-purple);
+	font-weight: bold;
+}
+
+p,
+a,
+li {
 	line-height: 1.5;
 }
 
@@ -30,7 +32,7 @@ header {
 }
 
 main {
-	padding-bottom: 6rem; /* Footer height */
+	padding-bottom: 5rem; /* Footer height */
 }
 
 footer {
@@ -81,6 +83,15 @@ img {
 :focus {
 	outline: 0.2rem solid var(--color-purple);
 }
+
+.focus-visible-only:focus {
+	outline: none;
+}
+
+.focus-visible-only:focus-visible {
+	outline: 0.2rem solid var(--color-purple);
+}
+
 /* Remove _all_ animations and transitions for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
 	body {

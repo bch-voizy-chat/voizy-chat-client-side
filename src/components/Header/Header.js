@@ -17,7 +17,11 @@ const Header = () => {
 		<header>
 			<Navbar collapseOnSelect expand='lg' expanded={expanded}>
 				<Navbar.Brand>
-					<NavLink to='/' onClick={() => setExpanded(false)}>
+					<NavLink
+						to='/'
+						className='focus-visible-only'
+						onClick={() => setExpanded(false)}
+					>
 						<h1 className='visually-hidden'>Voizy Chat</h1>
 						<img src={logo} alt='Voizy Logo' />
 					</NavLink>
@@ -32,14 +36,14 @@ const Header = () => {
 							<>
 								<NavLink
 									to='/account'
-									className='voizy-nav-link'
+									className='voizy-nav-link focus-visible-only'
 									onClick={() => setExpanded(false)}
 								>
 									Account
 								</NavLink>
 								<button
 									type='button'
-									className='btn-text voizy-nav-link'
+									className='btn-text voizy-nav-link focus-visible-only '
 									onClick={logoutHandler}
 								>
 									Log Out
@@ -49,14 +53,14 @@ const Header = () => {
 							<>
 								<NavLink
 									to='/login'
-									className='voizy-nav-link'
+									className='voizy-nav-link focus-visible-only'
 									onClick={() => setExpanded(false)}
 								>
 									Log In
 								</NavLink>
 								<NavLink
 									to='/signup'
-									className='voizy-nav-link'
+									className='voizy-nav-link focus-visible-only'
 									onClick={() => setExpanded(false)}
 								>
 									Sign Up

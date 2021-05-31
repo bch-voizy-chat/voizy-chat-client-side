@@ -17,7 +17,7 @@ const Thread = ({ thread }) => {
 
 	const shareHandler = () => console.log("share!");
 	return (
-		<article className='thread'>
+		<article className='thread audio-container'>
 			<h2 className='audio__title'>Audio {thread}</h2>
 			<AudioPlayer />
 			<div className='d-flex justify-content-between thread__icon-container'>

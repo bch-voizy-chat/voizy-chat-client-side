@@ -1,9 +1,13 @@
-/* for dev purpose */
-.comment {
-	border: 1px solid;
+/* Bootstrap overides */
+
+ol,
+ul {
+	padding-left: 0;
 }
 
-/* Bootstrap overides */
+.form-control {
+	border: 1px solid var(--color-orange);
+}
 
 .form-control:focus {
 	border-color: var(--color-purple);
@@ -30,6 +34,17 @@
 	border-color: var(--color-orange);
 }
 
+.btn-primary.disabled,
+.btn-primary:disabled {
+	background-color: var(--color-orange);
+	border-color: var(--color-orange);
+}
+
+.btn-primary:hover {
+	opacity: 0.9;
+}
+
+.btn-primary:active:focus,
 .btn-primary:focus {
 	/* border-color: var(--color-purple); */
 	box-shadow: var(--box-shadow-outline);
@@ -39,11 +54,14 @@
 
 .voizy-nav-link {
 	display: inline-block;
+	width: fit-content;
+	margin: 0 auto;
 	margin-top: 1rem;
 	font-size: 1.5rem;
 	color: white;
 	text-decoration: none;
 	text-align: center;
+	font-weight: bold;
 }
 
 .voizy-nav-link:active {
@@ -72,7 +90,7 @@
 	background-color: white;
 	position: fixed;
 	right: 3%;
-	bottom: 3%;
+	bottom: 2%;
 	border-radius: 50%;
 	border: 1px solid #eee;
 	box-shadow: 0 5px 5px 1px rgba(0, 0, 0, 0.25);
@@ -92,13 +110,19 @@
 	border-radius: 50%;
 }
 
-.thread {
+/** Thread & Comment components */
+
+.audio-container {
 	padding-top: 2rem;
-	border-bottom: 0.2rem solid #eee;
+	border-bottom: 0.2rem solid #ddd;
 }
 
-.thread > * {
+.audio-container > * {
 	padding: 0 5%;
+}
+
+.comment {
+	background-color: #eee;
 }
 
 .thread__icon {
@@ -118,7 +142,7 @@
 }
 
 .thread__icon-container {
-	border-top: 0.1rem solid #eee;
+	border-top: 0.1rem solid #ddd;
 }
 
 .thread__icon--comment::before {
@@ -150,10 +174,11 @@
 	background-image: url("./assets/icons/like--active.png");
 }
 
-/* UserAccount */
+/* User Account */
 
 .detail__container {
 	border: 1px solid var(--color-orange);
+	border-radius: 0.25rem;
 }
 
 .detail__container > p {

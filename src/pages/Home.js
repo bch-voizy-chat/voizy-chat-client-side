@@ -17,7 +17,10 @@ const Home = () => {
 	return (
 		<div>
 			<Link
-				to='/new'
+				to={{
+					pathname: "/new",
+					state: { message: "new thread", status: 0 },
+				}}
 				className='squishy new-audio-link'
 				title='Start a conversation.'
 			>
@@ -39,6 +42,7 @@ const Home = () => {
 			<p>
 				All threads; {userLoggedIn ? "User is logged in" : "No users logged in"}
 			</p>
+
 			<section>{threadList}</section>
 		</div>
 	);
