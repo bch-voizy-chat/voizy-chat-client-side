@@ -22,7 +22,7 @@ const UserAccount = () => {
 				<Button disabled className='squishy w-100'>
 					Edit Account
 				</Button>
-				<p class='text-danger w-75 mx-auto'>
+				<p className='text-danger w-75 mx-auto'>
 					This information can’t be edited for the time being.
 				</p>
 			</section>

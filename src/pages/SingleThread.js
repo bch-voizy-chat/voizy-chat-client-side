@@ -5,8 +5,9 @@ import Thread from "../components/Main/Thread";
 import Comment from "../components/Main/Comment";
 
 const SingleThread = () => {
-	/** [1,2,3] for dev purpose */
+	/** [1,2,3] and threadId for dev purpose */
 	const [comments, setComments] = useState([1, 2, 3]);
+	let threadId = 1;
 
 	const commentList = comments.map((comment) => {
 		return (
@@ -22,7 +23,7 @@ const SingleThread = () => {
 			<Link
 				to={{
 					pathname: "/new",
-					state: { message: "new comment", status: 1 },
+					state: { message: "new comment", status: 1, threadId: threadId },
 				}}
 				className='squishy new-audio-link'
 				title='Add a comment.'
