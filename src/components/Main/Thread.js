@@ -41,6 +41,20 @@ const Thread = ({ thread }) => {
 	};
 
 	const shareHandler = () => console.log("share!");
+	const shareData = {
+		title: "Thread title",
+		text: "Listen to what [username] has to say",
+		url: `/conversation/${thread}`,
+	};
+	const shareHandler = async () => {
+		try {
+			await navigator.share(shareData);
+			console.log("shared!");
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
 	return (
 		<article className='thread audio-container'>
 			<p className='mb-0'>
