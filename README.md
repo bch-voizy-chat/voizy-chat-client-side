@@ -20,6 +20,7 @@ npm install
 npm install axios
 npm install react-router-dom
 npm install react-bootstrap bootstrap
+npm install js-cookie
 ```
 
 ## Author & Acknowledgment
