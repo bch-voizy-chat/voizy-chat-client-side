@@ -15,7 +15,6 @@ const NewAudio = (props) => {
 		<div>
 			{isComment ? "Comment for thread " + threadId : "New thread"}
 			<Recorder />
-			<NewAudioPlayback />
 		</div>
 	);
 };

@@ -6,6 +6,8 @@ class Recorder extends Component {
   // State Value
     state = {
         audioDetails: {
+        // filename:"",
+        // tags:[],
         url: null,
         blob: null,
         chunks: null,
