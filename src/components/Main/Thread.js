@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
-import AudioPlayer from "./AudioPlayer";
-import { Link } from "react-router-dom";
+import PlayerComponent from "./PlayerComponent";
+import { Link, useLocation } from "react-router-dom";
 
 const Thread = ({ thread }) => {
+	const location = useLocation();
 	const [like, setLike] = useState(false);
 
 	const likeHandler = () => {
@@ -19,11 +20,22 @@ const Thread = ({ thread }) => {
 	return (
 		<article className='thread audio-container'>
 			<h2 className='audio__title'>Audio {thread}</h2>
-			<AudioPlayer />
+			<PlayerComponent />
 			<div className='d-flex justify-content-between thread__icon-container'>
 				<Link
 					className='d-flex align-items-center  comment-link thread__icon thread__icon--comment squishy'
-					to={`/conversation/${thread}`}
+					to={
+						location.pathname === "/"
+							? `/conversation/${thread}`
+							: {
+									pathname: "/new",
+									state: {
+										message: "new comment",
+										status: 1,
+										threadId: thread,
+									},
+							  }
+					}
 				>
 					22<span className='visually-hidden'>comments. Comment</span>
 				</Link>
