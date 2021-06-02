@@ -1,10 +1,31 @@
+/*
+This project makes use of react-voice-recorder (https://github.com/sivaprakashDesingu/react-voice-recorder)
+
+MIT License
+
+Copyright (c) 2020 Sivaprakash Desingu
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+
 import React, { Component } from "react";
 // import microphone from '../../assets/imgs/recorder_imgs/microphone.png';
 // import stopIcon from '../../assets/imgs/recorder_imgs/stop.png';
 // import pauseIcons from '../../assets/imgs/recorder_imgs/pause.png';
-// import playIcons from '../../assets/imgs/recorder_imgs/play-button.png';
+import playIcon from '../../assets/imgs/recorder_imgs/play-button.png';
 // import closeIcons from '../../assets/imgs/recorder_imgs/close.png';
 import styles from '../../recorder.module.css';
+import AudioPlayer,  { RHAP_UI } from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
+import '../../audio-player-customization.css';
+
+
+
 const audioType = "audio/*";
 
 class NewAudioRecorder extends Component {
@@ -14,6 +35,7 @@ class NewAudioRecorder extends Component {
       time: {},
       seconds: 0,
       recording: false,
+      recorded: false,
       medianotFound: false,
       audios: [],
       audioBlob: null
@@ -114,6 +136,8 @@ class NewAudioRecorder extends Component {
     this.setState({ recording: false, pauseRecord: false, });
     // save the video to memory
     this.saveAudio();
+    // say that the audio is recorded
+    this.setState({recorded: true});
   }
 
   handleReset(e) {
@@ -124,6 +148,7 @@ class NewAudioRecorder extends Component {
       time: {},
       seconds: 0,
       recording: false,
+      recorded: false,
       medianotFound: false,
       audios: [],
       audioBlob: null
@@ -151,7 +176,7 @@ class NewAudioRecorder extends Component {
   }
 
   render() {
-    const { recording, audios, time, medianotFound, pauseRecord } = this.state;
+    const { recording, recorded, audios, time, medianotFound, pauseRecord } = this.state;
     const { showUIAudio, title, audioURL } = this.props;
     return (
       <div className={styles.recorder_library_box}>
@@ -190,15 +215,11 @@ class NewAudioRecorder extends Component {
                         {/* End of upload and clear buttons section */}  
 
 
-                    <div className={styles.duration_section}>
-                    <div className={styles.audio_section}>
-                        {audioURL !== null && showUIAudio ? (
-                        <audio controls>
-                            <source src={audios[0]} type="audio/ogg" />
-                            <source src={audios[0]} type="audio/mpeg" />
-                        </audio>
-                        ) : null}
-                    </div>
+                      <div className={styles.duration_section}>
+                    
+                    {/* Prev. here was the audio preview */}
+
+                    {!recorded ? (
                     <div className={styles.duration}>
                         <span className={styles.mins}>
                         {time.m !== undefined
@@ -212,8 +233,9 @@ class NewAudioRecorder extends Component {
                             : "00"}
                         </span>
                     </div>
+                    ): null}
 
-                    {!recording ? (
+                    {!recording && !recorded ? (
                         <p className={styles.help}>Press the microphone to record</p>
                     ) : null}
                     </div>
@@ -222,7 +244,7 @@ class NewAudioRecorder extends Component {
 
 
 
-                    {!recording ? (
+                    {!recording && !recorded ? (
                     <a
                         onClick={e => this.startRecording(e)}
                         href=" #"
@@ -239,7 +261,9 @@ class NewAudioRecorder extends Component {
                         </span>
                     </a>
                     
-                    ) : (
+                    ) : ( !recorded ? (
+
+
                         <div className={styles.record_controller}>
                         <a
                             onClick={e => this.stopRecording(e)}
@@ -265,6 +289,7 @@ class NewAudioRecorder extends Component {
                             <span className={styles.pause_icons}></span>}
                         </a>
                         </div>
+                        ) : null
 
                     )}             
 
@@ -275,23 +300,60 @@ class NewAudioRecorder extends Component {
                     </p>
                 )}
 
-                        {/* <h2> button wrapper </h2> */}
+                        <h3> {audioURL !== null && showUIAudio ? "Audio preview" : null }</h3>
+                        {/* Audio Preview */}
+                        <div className={styles.audio_section}>
+                        {audioURL !== null && showUIAudio ? (
+                        //** Commenting out default audio element browser player **//
+                        // <audio controls>
+                        //     <source src={audios[0]} type="audio/ogg" />
+                        //     <source src={audios[0]} type="audio/mpeg" />
+                        // </audio>
+                        
+                        <AudioPlayer
+                        style={{width: '300px'}}
+                          src={audios[0]}
+                          customAdditionalControls={[]}
+                          customVolumeControls={[]}
+                          showJumpControls={false}
+                          layout="stacked-reverse"
+                          customProgressBarSection={
+                            [
+                              // RHAP_UI.CURRENT_TIME,
+                              RHAP_UI.PROGRESS_BAR,
+                              // RHAP_UI.CURRENT_LEFT_TIME,
+                            ]
+                          }
+                          // Testing custom play icon
+                        //   customIcons={{
+                        //     play: playIcon
+                        />
+                        ) : null}
+                    </div>
+                      
+                      
+                      {/* Upload and Reset buttons */}
                         <div className={styles.btn_wrapper}>
-                        <button
-                            onClick={() =>
-                            this.props.handleAudioUpload(this.state.audioBlob)
-                            }
-                            className={`${styles.btn} ${styles.upload_btn}`}
-                            disabled={this.props.uploadButtonDisabled}
-                        >
-                            Upload
-                        </button>
-                        <button
-                            onClick={(e) => this.handleReset(e)}
-                            className={`${styles.btn} ${styles.clear_btn}`}
-                        >
-                            Clear
-                        </button>
+                          {recorded ? (
+                            <button
+                              onClick={() =>
+                              this.props.handleAudioUpload(this.state.audioBlob)
+                              }
+                              className={`${styles.btn} ${styles.upload_btn}`}
+                              disabled={this.props.uploadButtonDisabled}
+                            >
+                              Upload
+                            </button>
+                          ) : null}
+
+                          {recorded ? (
+                            <button
+                                onClick={(e) => this.handleReset(e)}
+                                className={`${styles.btn} ${styles.clear_btn}`}
+                            >
+                                Clear
+                            </button>
+                          ) : null}
                         </div>
 
           </div>

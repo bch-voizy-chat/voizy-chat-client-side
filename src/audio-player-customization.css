@@ -1,3 +1,13 @@
+:root {
+  --voicy-orange: #fe9100;
+  --voicy-purple: #200b5d;
+  --voicy-player-gray: #f1f3f4;
+  --voicy-red: #c7341e;
+  --voicy-green: #5db082;
+  --voicy-bright-blue: #1e55c5;
+  --voicy-light: #ffffff;
+}
+
 body {
   background-color: white;
 }
@@ -15,12 +25,12 @@ body {
 }
 
 .rhap_container svg {
-  color: orange;
+  color: var(--voicy-orange);
 }
 
 .rhap_current-time,
 .rhap_total-time {
-  color: orange;
+  color: var(--voicy-orange);
 }
 
 .rhap_current-time {
@@ -29,8 +39,8 @@ body {
 
 .rhap_progress-filled,
 .rhap_progress-indicator {
-  color: #fe9100;
-  background-color: #fe9100;
+  color: var(--voicy-orange);
+  background-color: var(--voicy-orange);
 }
 
 /* player container */
