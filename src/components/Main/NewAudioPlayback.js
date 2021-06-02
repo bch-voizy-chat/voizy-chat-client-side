@@ -3,7 +3,6 @@ import React from "react";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 
-import InputTags from "./InputTags";
 import demoAudio from "../../audio/Yksi_pieni_elefanti_intro.mp3";
 import { Container, Row, Col } from "react-bootstrap";
 // remember to keep the custom.css file at the bottom for overriding the styles accordingly.
@@ -36,7 +35,6 @@ const NewAudioPlayback = () => {
 					</Col>
 				</Row>
 			</Container>
-			<InputTags />
 		</div>
 	);
 };
