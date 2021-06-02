@@ -1,0 +1,61 @@
+body {
+  background-color: white;
+}
+
+.rhap_container,
+.rhap_container *:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.rhap_container {
+  background-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  padding: 5px 0px 5px 0px;
+}
+
+.rhap_container svg {
+  color: orange;
+}
+
+.rhap_current-time,
+.rhap_total-time {
+  color: orange;
+}
+
+.rhap_current-time {
+  display: none;
+}
+
+.rhap_progress-filled,
+.rhap_progress-indicator {
+  color: #fe9100;
+  background-color: #fe9100;
+}
+
+/* player container */
+.player-component-container {
+  /* background-color: green; */
+}
+
+.rhap_main {
+  /* background-color: pink; */
+}
+
+.rhap_horizontal-reverse {
+  /* background-color: yellow; */
+}
+
+/* ## A ## Controls section */
+.rhap_controls-section {
+}
+
+.rhap_additional-controls {
+}
+
+.rhap_main-controls {
+}
+
+/* ## B ## Progress bar section */
+.rhap_progress-section {
+}

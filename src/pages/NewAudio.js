@@ -1,6 +1,6 @@
 import React from "react";
 
-import NewAudioRecorder from "../components/Main/NewAudioRecorder";
+import Recorder from "../components/Main/Recorder";
 import NewAudioPlayback from "../components/Main/NewAudioPlayback";
 
 const NewAudio = (props) => {
@@ -14,7 +14,7 @@ const NewAudio = (props) => {
 	return (
 		<div>
 			{isComment ? "Comment for thread " + threadId : "New thread"}
-			<NewAudioRecorder />
+			<Recorder />
 			<NewAudioPlayback />
 		</div>
 	);
