@@ -23,7 +23,11 @@ const SingleThread = () => {
 			<Link
 				to={{
 					pathname: "/new",
-					state: { message: "new comment", status: 1, threadId: threadId },
+					state: { 
+						message: "new comment", 
+						status: 1, 
+						threadId: threadId 
+					},
 				}}
 				className='squishy new-audio-link'
 				title='Add a comment.'
