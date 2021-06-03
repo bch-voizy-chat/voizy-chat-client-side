@@ -23,9 +23,9 @@ const Thread = ({ thread }) => {
 	return (
 		<article className='thread audio-container'>
 			<h3 className='audio__title'>{thread.threadName}</h3>
-			<p className='thread__tags'>{tags}</p>
+			<p className='thread__tags font-weight-bold'>{tags}</p>
 
-			<PlayerComponent threadAudioPath={thread.threadAudioPath} />
+			<PlayerComponent audioPath={thread.threadAudioPath} />
 
 			<p className='d-flex justify-content-end'>
 				<strong>{thread.threadCreator.userName}</strong>. {thread.threadDate}
@@ -46,7 +46,8 @@ const Thread = ({ thread }) => {
 							  }
 					}
 				>
-					22<span className='visually-hidden'>comments. Comment</span>
+					{thread.threadResponse.length}
+					<span className='visually-hidden'>comments. Comment</span>
 				</Link>
 				<button
 					className='btn-text squishy thread__icon thread__icon--share'
@@ -55,7 +56,8 @@ const Thread = ({ thread }) => {
 					<span className='visually-hidden'>Share</span>
 				</button>
 				<button className={likeBtnClass} onClick={likeHandler}>
-					96<span className='visually-hidden'>likes. Like</span>
+					{thread.threadLike}
+					<span className='visually-hidden'>likes. Like</span>
 				</button>
 			</div>
 		</article>

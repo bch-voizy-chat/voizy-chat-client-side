@@ -7,9 +7,7 @@ import Comment from "../components/Main/Comment";
 
 const SingleThread = () => {
 	/** [1,2,3] and threadId for dev purpose */
-	const [comments, setComments] = useState([1, 2, 3]);
-	let threadId = 1;
-	let threadPosterUserName = "bob";
+	const [comments, setComments] = useState([]);
 	const [thread, setThread] = useState({
 		id: 0,
 		threadName: "",
@@ -20,6 +18,7 @@ const SingleThread = () => {
 			userId: 0,
 			userName: "",
 		},
+		threadResponse: [],
 	});
 
 	let { id } = useParams();
@@ -28,6 +27,7 @@ const SingleThread = () => {
 		try {
 			let res = await axios.get(`http://localhost:3001/threads/${id}`);
 			setThread(res.data);
+			setComments(res.data.threadResponse);
 			console.log(res.data);
 		} catch (err) {
 			console.log(err);
@@ -38,8 +38,8 @@ const SingleThread = () => {
 
 	const commentList = comments.map((comment) => {
 		return (
-			<li key={comment}>
-				<Comment comment={comment} />
+			<li key={comment.responseId}>
+				<Comment response={comment} />
 			</li>
 		);
 	});

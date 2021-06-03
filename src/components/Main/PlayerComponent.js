@@ -18,11 +18,11 @@ import "react-h5-audio-player/lib/styles.css";
 
 import demoAudio from "../../audio/Yksi_pieni_elefanti_intro.mp3";
 
-const PlayerComponent = () => {
+const PlayerComponent = ({ audioPath }) => {
 	return (
 		<div className='player-component-container'>
 			<AudioPlayer
-				src={threadAudioPath}
+				src={audioPath}
 				customAdditionalControls={[]}
 				customVolumeControls={[]}
 				showJumpControls={false}
