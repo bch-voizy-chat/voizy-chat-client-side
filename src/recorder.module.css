@@ -27,7 +27,7 @@
 
 .recorder_library_box .recorder_box_inner {
   min-height: 400px;
-  background: var(--voicy-player-gray);
+  background: var(--voicy-light);
   border-radius: 0 0 3px 3px;
   display: flex;
   flex-direction: column;
