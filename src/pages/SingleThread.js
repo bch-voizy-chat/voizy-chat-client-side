@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 
 import Thread from "../components/Main/Thread";
 import Comment from "../components/Main/Comment";
@@ -9,6 +10,31 @@ const SingleThread = () => {
 	const [comments, setComments] = useState([1, 2, 3]);
 	let threadId = 1;
 	let threadPosterUserName = "bob";
+	const [thread, setThread] = useState({
+		id: 0,
+		threadName: "",
+		threadAudioPath: "",
+		threadDate: "",
+		threadTags: [],
+		threadCreator: {
+			userId: 0,
+			userName: "",
+		},
+	});
+
+	let { id } = useParams();
+
+	const fetchData = async () => {
+		try {
+			let res = await axios.get(`http://localhost:3001/threads/${id}`);
+			setThread(res.data);
+			console.log(res.data);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	useEffect(fetchData, []);
 
 	const commentList = comments.map((comment) => {
 		return (
@@ -20,7 +46,7 @@ const SingleThread = () => {
 
 	return (
 		<div className='content'>
-			<Thread />
+			<Thread thread={thread} />
 			<Link
 				to={{
 					pathname: "/new",

@@ -4,9 +4,9 @@ import PlayerComponent from "./PlayerComponent";
 import { Link, useLocation } from "react-router-dom";
 
 const Thread = ({ thread }) => {
+	console.log(thread);
 	const location = useLocation();
 	const [like, setLike] = useState(false);
-
 	const likeHandler = () => {
 		console.log("like!");
 		like ? setLike(false) : setLike(true);
@@ -16,23 +16,32 @@ const Thread = ({ thread }) => {
 		like && "liked"
 	}`;
 
+	let tags = "";
+	thread.threadTags.forEach((tag) => (tags += "#" + tag + " "));
+
 	const shareHandler = () => console.log("share!");
 	return (
 		<article className='thread audio-container'>
-			<h2 className='audio__title'>Audio {thread}</h2>
-			<PlayerComponent />
+			<h3 className='audio__title'>{thread.threadName}</h3>
+			<p className='thread__tags'>{tags}</p>
+
+			<PlayerComponent threadAudioPath={thread.threadAudioPath} />
+
+			<p className='d-flex justify-content-end'>
+				<strong>{thread.threadCreator.userName}</strong>. {thread.threadDate}
+			</p>
 			<div className='d-flex justify-content-between thread__icon-container'>
 				<Link
 					className='d-flex align-items-center  comment-link thread__icon thread__icon--comment squishy'
 					to={
 						location.pathname === "/"
-							? `/conversation/${thread}`
+							? `/conversation/${thread.id}`
 							: {
 									pathname: "/new",
 									state: {
 										message: "new comment",
 										status: 1,
-										threadId: thread,
+										threadId: thread.id,
 									},
 							  }
 					}

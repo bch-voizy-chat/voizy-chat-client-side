@@ -131,6 +131,10 @@ ul {
 	background-color: #eee;
 }
 
+.thread__tags {
+	color: var(--color-orange);
+}
+
 .thread__icon {
 	min-width: 80px;
 	height: 3rem;

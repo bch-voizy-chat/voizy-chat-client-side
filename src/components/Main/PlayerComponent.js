@@ -22,7 +22,7 @@ const PlayerComponent = () => {
 	return (
 		<div className='player-component-container'>
 			<AudioPlayer
-				src={demoAudio}
+				src={threadAudioPath}
 				customAdditionalControls={[]}
 				customVolumeControls={[]}
 				showJumpControls={false}
