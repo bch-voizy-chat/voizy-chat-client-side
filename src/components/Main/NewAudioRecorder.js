@@ -23,6 +23,7 @@ import styles from '../../recorder.module.css';
 import AudioPlayer,  { RHAP_UI } from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import '../../audio-player-customization.css';
+import { Form, Button } from "react-bootstrap";
 
 
 
@@ -36,8 +37,11 @@ class NewAudioRecorder extends Component {
       seconds: 0,
       recording: false,
       recorded: false,
+      mic_access_granted: false,
       medianotFound: false,
       audios: [],
+      audio_title: "",
+      audio_tags: [],
       audioBlob: null
     };
     this.timer = 0;
@@ -90,6 +94,9 @@ class NewAudioRecorder extends Component {
     return obj;
   }
 
+  // notSupported ()
+
+
   async componentDidMount() {
     navigator.getUserMedia =
       navigator.getUserMedia ||
@@ -97,7 +104,13 @@ class NewAudioRecorder extends Component {
       navigator.mozGetUserMedia ||
       navigator.msGetUserMedia;
     if (navigator.mediaDevices) {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await (await navigator.mediaDevices.getUserMedia({ audio: true }));
+      // .then(() => this.setState({ mic_access_granted: true })).catch(notSupported())
+      console.log(`The typeof stream ${typeof(stream) === 'object' ? "is an object" : "is not an object"} on navigator.mediaDevice.getUserMedia`);
+      if(typeof(stream)==='object'){
+        this.setState({ mic_access_granted: true });
+        console.log(`mic_access_granted is true`);
+      }    
       if(this.props.mimeTypeToUseWhenRecording) {
         this.mediaRecorder = new MediaRecorder(stream, { mimeType: this.props.mimeTypeToUseWhenRecording });
       } else {
@@ -111,20 +124,44 @@ class NewAudioRecorder extends Component {
       };
     } else {
       this.setState({ medianotFound: true });
-      console.log("Media Decives will work only with SSL.....");
+      this.setState({ mic_access_granted: false });
+      console.log("Media Decives will work only with SSL and if the user grants access to the device microphone...");
     }
   }
 
-  startRecording(e) {
+  checkMicPermissionBeforeStart(e) {
     e.preventDefault();
-    // wipe old data chunks
-    this.chunks = [];
-    // start recorder with 10ms buffer
-    this.mediaRecorder.start(10);
-    this.startTimer();
-    // say that we're recording
-    this.setState({ recording: true });
-  }
+    if(!this.state.mic_access_granted) {
+      <p className={styles.help}>
+        Some message
+        {/* You need to grant access to your device microphone to be able to record audio.
+        If you have blocked the access for this site, you can unblock it from your browser settings page.
+                    
+        On Chrome, you can go to chrome://settings/content/microphone */}
+     </p>
+    } else {
+          // wipe old data chunks
+          this.chunks = [];
+          // start recorder with 10ms buffer
+          this.mediaRecorder.start(10);
+          this.startTimer();
+          // say that we're recording
+          this.setState({ recording: true });
+      }
+    }
+
+    // Commenting out startRecording to test it into checkMicPermissionBeforeStart()
+/* startRecording(e) {
+  e.preventDefault();
+  // wipe old data chunks
+  this.chunks = [];
+  // start recorder with 10ms buffer
+  this.mediaRecorder.start(10);
+  this.startTimer();
+  // say that we're recording
+  this.setState({ recording: true });
+} */
+
 
   stopRecording(e) {
     clearInterval(this.timer);
@@ -150,12 +187,19 @@ class NewAudioRecorder extends Component {
       recording: false,
       recorded: false,
       medianotFound: false,
+      mic_access_granted: true,
       audios: [],
+      audio_title: "",
+      audio_tags: [],
       audioBlob: null
     }, () => {
 
       this.props.handleReset(this.state);
     });
+
+  }
+
+  handleAudioUpload() {
 
   }
 
@@ -175,8 +219,20 @@ class NewAudioRecorder extends Component {
     });
   }
 
+
+  saveAudioDetails (audioTitle, audioTags) {
+    let a_title = "";
+    let a_tags = [];
+
+    this.setState({
+      audio_title: {a_title},
+      audio_tags: {a_tags}
+    }, () => {}
+    )
+  }
+
   render() {
-    const { recording, recorded, audios, time, medianotFound, pauseRecord } = this.state;
+    const { recording, recorded, mic_access_granted, audios, time, medianotFound, pauseRecord, audio_title, audio_tags } = this.state;
     const { showUIAudio, title, audioURL } = this.props;
     return (
       <div className={styles.recorder_library_box}>
@@ -193,33 +249,13 @@ class NewAudioRecorder extends Component {
                 {!medianotFound ? (
                 <div className={styles.record_section}>
 
-                        {/* Uplodad and Clear buttons */}
-{/*                         <h2> button wrapper </h2>
-                        <div className={styles.btn_wrapper}>
-                        <button
-                            onClick={() =>
-                            this.props.handleAudioUpload(this.state.audioBlob)
-                            }
-                            className={`${styles.btn} ${styles.upload_btn}`}
-                            disabled={this.props.uploadButtonDisabled}
-                        >
-                            Upload
-                        </button>
-                        <button
-                            onClick={(e) => this.handleReset(e)}
-                            className={`${styles.btn} ${styles.clear_btn}`}
-                        >
-                            Clear
-                        </button>
-                        </div> */}
-                        {/* End of upload and clear buttons section */}  
-
+                        {/* Prev. Uplodad and Clear buttons */}
 
                       <div className={styles.duration_section}>
                     
-                    {/* Prev. here was the audio preview */}
+                    {/* Prev. Audio Preview */}
 
-                    {!recorded ? (
+                    {!recorded && mic_access_granted ? (
                     <div className={styles.duration}>
                         <span className={styles.mins}>
                         {time.m !== undefined
@@ -235,18 +271,30 @@ class NewAudioRecorder extends Component {
                     </div>
                     ): null}
 
-                    {!recording && !recorded ? (
+                    {!recording && !recorded && mic_access_granted ? (
                         <p className={styles.help}>Press the microphone to record</p>
-                    ) : null}
+                    ) : recording && !recorded && mic_access_granted ?
+                    null : !recording && recorded && mic_access_granted ?
+                    null : !recording && !recorded && !mic_access_granted ?
+                    null : (<p className={styles.help}>You need to grant access to your device microphone to be able to record audio.
+                    If you have blocked the access for this site, you can unblock it from your browser settings page.
+                    
+                    On Chrome, you can go to 
+                    chrome://settings/content/microphone
+                    </p>)}
+                    
+                    
+                    
                     </div>
 
                     
 
 
 
-                    {!recording && !recorded ? (
+                    {!recording && !recorded && mic_access_granted ? (
                     <a
-                        onClick={e => this.startRecording(e)}
+                        // onClick={e => this.startRecording(e)}
+                        onClick={e => this.checkMicPermissionBeforeStart(e)}
                         href=" #"
                         className={styles.mic_icon}
                     >
@@ -261,7 +309,7 @@ class NewAudioRecorder extends Component {
                         </span>
                     </a>
                     
-                    ) : ( !recorded ? (
+                    ) : ( !recorded && mic_access_granted ? (
 
 
                         <div className={styles.record_controller}>
@@ -324,36 +372,47 @@ class NewAudioRecorder extends Component {
                               // RHAP_UI.CURRENT_LEFT_TIME,
                             ]
                           }
-                          // Testing custom play icon
-                        //   customIcons={{
-                        //     play: playIcon
                         />
+
                         ) : null}
                     </div>
                       
                       
                       {/* Upload and Reset buttons */}
                         <div className={styles.btn_wrapper}>
+
                           {recorded ? (
-                            <button
-                              onClick={() =>
+                            <Form>
+                            <Form.Group className="mb-3" controlId="audioTitle">
+                              <Form.Label>Audio title</Form.Label>
+                              <Form.Control as="textarea" rows={2} placeholder="My Audio Title" />
+                              <Form.Text className="text-muted">
+                                Max. 140 characters.
+                              </Form.Text>
+                            </Form.Group>
+                          
+                            <Form.Group className="mb-3" controlId="audioTags">
+                              <Form.Label>Tags</Form.Label>
+                              <Form.Control as="textarea" rows={3} placeholder="Separate tags by commas. E.g. fun, politics, etc." />
+                              <Form.Text className="text-muted">
+                                Separte tags by commas.
+                              </Form.Text>
+                            </Form.Group>
+                            <Button onClick={() =>
                               this.props.handleAudioUpload(this.state.audioBlob)
                               }
                               className={`${styles.btn} ${styles.upload_btn}`}
-                              disabled={this.props.uploadButtonDisabled}
-                            >
+                              disabled={this.props.uploadButtonDisabled}>
                               Upload
-                            </button>
-                          ) : null}
+                            </Button>
 
-                          {recorded ? (
-                            <button
-                                onClick={(e) => this.handleReset(e)}
-                                className={`${styles.btn} ${styles.clear_btn}`}
-                            >
-                                Clear
-                            </button>
+                            <Button onClick={(e) => this.handleReset(e)}
+                                className={`${styles.btn} ${styles.clear_btn}`}>
+                                  Clear
+                            </Button>
+                          </Form>
                           ) : null}
+                          
                         </div>
 
           </div>
