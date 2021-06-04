@@ -1,65 +1,245 @@
-import React, { Component } from 'react';
-import NewAudioRecorder from '../Main/NewAudioRecorder';
+/*
+This project makes use of react-voice-recorder (https://github.com/sivaprakashDesingu/react-voice-recorder)
+
+MIT License
+
+Copyright (c) 2020 Sivaprakash Desingu
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+import React, { Component } from "react";
+import NewAudioRecorder from "../Main/NewAudioRecorder";
+import NewAudioPlayback from "../Main/NewAudioPlayback";
+
+import styles from "../../recorder.module.css";
+import "react-h5-audio-player/lib/styles.css";
+import "../../audio-player-customization.css";
+
+const audioType = "audio/*";
 
 class Recorder extends Component {
+	constructor(props) {
+		super(props);
 
-  // State Value
-    state = {
-        audioDetails: {
-        // filename:"",
-        // tags:[],
-        url: null,
-        blob: null,
-        chunks: null,
-          duration: {
-          h: null,
-          m: null,
-          s: null,
-          }
-        }
-    }
+		this.state = {
+			time: {},
+			seconds: 0,
+			record: true,
+			recording: false,
+			recorded: false,
+			mic_access_granted: false,
+			medianotFound: false,
+			audios: [],
+			audio_title: "",
+			audio_tags: [],
+			audioBlob: null,
+			mimeTypeToUseWhenRecording: `audio/webm`,
+			recordedChunks: null,
+			pauseRecord: false,
+		};
+		this.timer = 0;
+		this.startTimer = this.startTimer.bind(this);
+		this.countDown = this.countDown.bind(this);
+	}
 
-  // Methods for handlers
-    handleAudioStop(data){
-      console.log(data)
-      this.setState({ audioDetails: data });
-    }
+	handleAudioPause(e) {
+		e.preventDefault();
+		clearInterval(this.timer);
+		this.mediaRecorder.pause();
+		this.setState({ pauseRecord: true });
+	}
+	handleAudioStart(e) {
+		e.preventDefault();
+		this.startTimer();
+		this.mediaRecorder.resume();
+		this.setState({ pauseRecord: false });
+	}
 
-    handleAudioUpload(file) {
-      console.log(file);
-    }
-    
-    handleReset() {
-      const reset = {
-          url: null,
-          blob: null,
-          chunks: null,
-            duration: {
-            h: null,
-            m: null,
-            s: null,
-            }
-      }
-      this.setState({ audioDetails: reset });
-    }
+	startTimer() {
+		//if (this.timer === 0 && this.state.seconds > 0) {
+		this.timer = setInterval(this.countDown, 1000);
+		//}
+	}
 
-  render() {
-    return (
-      <div>
-        {/* <h1>TEST RECORDER</h1> */}
-        <NewAudioRecorder
-          record={true}
-          title={"New recording"}
-          audioURL={this.state.audioDetails.url}
-          showUIAudio
-          handleAudioStop={data => this.handleAudioStop(data)}
-          handleAudioUpload={data => this.handleAudioUpload(data)}
-          handleReset={() => this.handleReset()}
-          mimeTypeToUseWhenRecording={`audio/webm`} // For specific mimetype.
-        />
-      </div>
-    );
-  }
+	countDown() {
+		// Remove one second, set state so a re-render happens.
+		let seconds = this.state.seconds + 1;
+		this.setState({
+			time: this.secondsToTime(seconds),
+			seconds: seconds,
+		});
+	}
+
+	secondsToTime(secs) {
+		let hours = Math.floor(secs / (60 * 60));
+		let divisor_for_minutes = secs % (60 * 60);
+		let minutes = Math.floor(divisor_for_minutes / 60);
+		let divisor_for_seconds = divisor_for_minutes % 60;
+		let seconds = Math.ceil(divisor_for_seconds);
+
+		let obj = {
+			h: hours,
+			m: minutes,
+			s: seconds,
+		};
+		return obj;
+	}
+
+	async componentDidMount() {
+		navigator.getUserMedia =
+			navigator.getUserMedia ||
+			navigator.webkitGetUserMedia ||
+			navigator.mozGetUserMedia ||
+			navigator.msGetUserMedia;
+		if (navigator.mediaDevices) {
+			const stream = await await navigator.mediaDevices.getUserMedia({
+				audio: true,
+			});
+			// .then(() => this.setState({ mic_access_granted: true })).catch(notSupported())
+			console.log(
+				`The typeof stream ${
+					typeof stream === "object" ? "is an object" : "is not an object"
+				} on navigator.mediaDevice.getUserMedia`
+			);
+			if (typeof stream === "object") {
+				this.setState({ mic_access_granted: true });
+				console.log(`mic_access_granted is true`);
+			}
+			if (this.state.mimeTypeToUseWhenRecording) {
+				this.mediaRecorder = new MediaRecorder(stream, {
+					mimeType: this.state.mimeTypeToUseWhenRecording,
+				});
+			} else {
+				this.mediaRecorder = new MediaRecorder(stream);
+			}
+			this.state.recordedChunks = [];
+			this.mediaRecorder.ondataavailable = (e) => {
+				if (e.data && e.data.size > 0) {
+					this.state.recordedChunks.push(e.data);
+				}
+			};
+		} else {
+			this.setState({ medianotFound: true });
+			this.setState({ mic_access_granted: false });
+			console.log(
+				"Media Decives will work only with SSL and if the user grants access to the device microphone..."
+			);
+		}
+	}
+
+	checkMicPermissionBeforeStart(e, mic_access) {
+		e.preventDefault();
+		if (!mic_access) {
+			<p className={styles.help}>
+				Some message
+				{/* You need to grant access to your device microphone to be able to record audio.
+        If you have blocked the access for this site, you can unblock it from your browser settings page.
+                    
+        On Chrome, you can go to chrome://settings/content/microphone */}
+			</p>;
+		} else {
+			// wipe old data chunks
+			this.state.recordedChunks = [];
+			// start recorder with 10ms buffer
+			this.mediaRecorder.start(10);
+			this.startTimer();
+			// say that we're recording
+			this.setState({ recording: true });
+		}
+	}
+
+	// Commenting out startRecording to test it into checkMicPermissionBeforeStart()
+	/* startRecording(e) {
+  e.preventDefault();
+  // wipe old data chunks
+  this.chunks = [];
+  // start recorder with 10ms buffer
+  this.mediaRecorder.start(10);
+  this.startTimer();
+  // say that we're recording
+  this.setState({ recording: true });
+} */
+
+	stopRecording(e) {
+		clearInterval(this.timer);
+		this.setState({ time: {} });
+		e.preventDefault();
+		// stop the recorder
+		this.mediaRecorder.stop();
+		// say that we're not recording
+		this.setState({ recording: false, pauseRecord: false });
+		// save the video to memory
+		this.saveAudio();
+		// say that the audio is recorded
+		this.setState({ recorded: true });
+	}
+
+	saveAudio() {
+		// convert saved chunks to blob
+		const blob = new Blob(this.state.recordedChunks, { type: audioType });
+		// generate video url from blob
+		const audioURL = window.URL.createObjectURL(blob);
+		// append videoURL to list of saved videos for rendering
+		const audios = [audioURL];
+		this.setState({ audios, audioBlob: blob });
+		this.props.handleAudioStop({
+			url: audioURL,
+			blob: blob,
+			chunks: this.state.recordedChunks,
+			duration: this.state.time,
+		});
+	}
+
+	saveAudioDetails(audioTitle, audioTags) {
+		let a_title = "";
+		let a_tags = [];
+
+		this.setState(
+			{
+				audio_title: { a_title },
+				audio_tags: { a_tags },
+			},
+			() => {}
+		);
+	}
+
+	render() {
+		return (
+			<div className={styles.recorder_library_box}>
+				<div className={styles.recorder_box}>
+					<div className={styles.recorder_box_inner}>
+						{/* {audioURL !== null && showUIAudio ? (	) : null} */}
+						{true ? (
+							<NewAudioRecorder
+								// recording={this.state.recording}
+								// recorded={this.state.recorded}
+								// mic_access_granted={this.state.mic_access_granted}
+								// time={this.state.time}
+								// medianotFound={this.state.medianotFound}
+								// pauseRecord={this.state.pauseRecord}
+
+								recorderState={this.state}
+								checkMicPermissionBeforeStart={
+									this.checkMicPermissionBeforeStart
+								}
+							/>
+						) : (
+							<NewAudioPlayback
+								audioURL={this.props.audioDetails.url}
+								showUIAudio
+								audios={this.state.audios}
+							/>
+						)}
+					</div>
+				</div>
+			</div>
+		);
+	}
 }
 
 export default Recorder;
