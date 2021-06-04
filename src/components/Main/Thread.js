@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
 import PlayerComponent from "./PlayerComponent";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Thread = ({ thread }) => {
+	const location = useLocation();
 	const [like, setLike] = useState(false);
 
 	const likeHandler = () => {
@@ -23,7 +24,18 @@ const Thread = ({ thread }) => {
 			<div className='d-flex justify-content-between thread__icon-container'>
 				<Link
 					className='d-flex align-items-center  comment-link thread__icon thread__icon--comment squishy'
-					to={`/conversation/${thread}`}
+					to={
+						location.pathname === "/"
+							? `/conversation/${thread}`
+							: {
+									pathname: "/new",
+									state: {
+										message: "new comment",
+										status: 1,
+										threadId: thread,
+									},
+							  }
+					}
 				>
 					22<span className='visually-hidden'>comments. Comment</span>
 				</Link>
