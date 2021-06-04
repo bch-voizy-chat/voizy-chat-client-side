@@ -22,14 +22,15 @@ const Thread = ({ thread }) => {
 	const shareHandler = () => console.log("share!");
 	return (
 		<article className='thread audio-container'>
-			<h3 className='audio__title'>{thread.threadName}</h3>
-			<p className='thread__tags font-weight-bold'>{tags}</p>
-
+			<p className='mb-0'>
+				<strong>{thread.threadCreator.userName}</strong> -{" "}
+				<span className='text-muted'>{thread.threadDate}</span>
+			</p>
+			<h3 className='thread__title'>
+				{thread.threadName} <span className='thread__tags'>{tags}</span>
+			</h3>
 			<PlayerComponent audioPath={thread.threadAudioPath} />
 
-			<p className='d-flex justify-content-end'>
-				<strong>{thread.threadCreator.userName}</strong>. {thread.threadDate}
-			</p>
 			<div className='d-flex justify-content-between thread__icon-container'>
 				<Link
 					className='d-flex align-items-center  comment-link thread__icon thread__icon--comment squishy'

@@ -17,11 +17,12 @@ const Comment = ({ response }) => {
 
 	return (
 		<div className='comment audio-container'>
-			<PlayerComponent audioPath={comment.responseAudioPath} />
-			<p className='d-flex justify-content-end'>
-				<strong>{comment.responseCreator.userName}</strong>.{" "}
-				{comment.responseDate}
+			<p>
+				<strong>{comment.responseCreator.userName}</strong>
+				{" - "}
+				<span className='text-muted'>{comment.responseDate}</span>
 			</p>
+			<PlayerComponent audioPath={comment.responseAudioPath} />
 			<div className='d-flex justify-content-end thread__icon-container'>
 				<button className={likeBtnClass} onClick={likeHandler}>
 					{comment.responseLike}

@@ -131,6 +131,10 @@ ul {
 	background-color: #eee;
 }
 
+.thread__title {
+	padding-right: 0;
+}
+
 .thread__tags {
 	color: var(--color-orange);
 }
