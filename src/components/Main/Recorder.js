@@ -104,11 +104,11 @@ class Recorder extends Component {
 				audio: true,
 			});
 			// .then(() => this.setState({ mic_access_granted: true })).catch(notSupported())
-			console.log(
+			/* 			console.log(
 				`The typeof stream ${
 					typeof stream === "object" ? "is an object" : "is not an object"
 				} on navigator.mediaDevice.getUserMedia`
-			);
+			); */
 			if (typeof stream === "object") {
 				this.setState({ mic_access_granted: true });
 				console.log(`mic_access_granted is true`);
@@ -129,14 +129,17 @@ class Recorder extends Component {
 		} else {
 			this.setState({ medianotFound: true });
 			this.setState({ mic_access_granted: false });
-			console.log(
+			console.log("mic denied");
+			/* 			console.log(
 				"Media Decives will work only with SSL and if the user grants access to the device microphone..."
-			);
+			); */
 		}
 	}
 
 	checkMicPermissionBeforeStart() {
 		if (!this.state.mic_access_granted) {
+			console.log(this.state.mic_access_granted);
+
 			alert(
 				"You need to grant access to your device microphone to be able to record audio. If you have blocked the access for this site, you can unblock it from your browser settings page. On Chrome, you cango to chrome://settings/content/microphone"
 			);
@@ -206,7 +209,6 @@ class Recorder extends Component {
 				recording: false,
 				recorded: false,
 				medianotFound: false,
-				mic_access_granted: false,
 				audios: [],
 				audio_title: "",
 				audio_tags: [],
