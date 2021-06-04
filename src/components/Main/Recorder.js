@@ -29,7 +29,6 @@ class Recorder extends Component {
 		this.state = {
 			time: {},
 			seconds: 0,
-			record: true,
 			recording: false,
 			recorded: false,
 			mic_access_granted: false,
@@ -45,16 +44,21 @@ class Recorder extends Component {
 		this.timer = 0;
 		this.startTimer = this.startTimer.bind(this);
 		this.countDown = this.countDown.bind(this);
+		this.checkMicPermissionBeforeStart =
+			this.checkMicPermissionBeforeStart.bind(this);
+		this.stopRecording = this.stopRecording.bind(this);
+		this.handleAudioPause = this.handleAudioPause.bind(this);
+		this.handleAudioStart = this.handleAudioStart.bind(this);
+		this.handleAudioUpload = this.handleAudioUpload.bind(this);
+		this.handleReset = this.handleReset.bind(this);
 	}
 
-	handleAudioPause(e) {
-		e.preventDefault();
+	handleAudioPause() {
 		clearInterval(this.timer);
 		this.mediaRecorder.pause();
 		this.setState({ pauseRecord: true });
 	}
-	handleAudioStart(e) {
-		e.preventDefault();
+	handleAudioStart() {
 		this.startTimer();
 		this.mediaRecorder.resume();
 		this.setState({ pauseRecord: false });
@@ -81,7 +85,6 @@ class Recorder extends Component {
 		let minutes = Math.floor(divisor_for_minutes / 60);
 		let divisor_for_seconds = divisor_for_minutes % 60;
 		let seconds = Math.ceil(divisor_for_seconds);
-
 		let obj = {
 			h: hours,
 			m: minutes,
@@ -132,19 +135,15 @@ class Recorder extends Component {
 		}
 	}
 
-	checkMicPermissionBeforeStart(e, mic_access) {
-		e.preventDefault();
-		if (!mic_access) {
-			<p className={styles.help}>
-				Some message
-				{/* You need to grant access to your device microphone to be able to record audio.
-        If you have blocked the access for this site, you can unblock it from your browser settings page.
-                    
-        On Chrome, you can go to chrome://settings/content/microphone */}
-			</p>;
+	checkMicPermissionBeforeStart() {
+		if (!this.state.mic_access_granted) {
+			alert(
+				"You need to grant access to your device microphone to be able to record audio. If you have blocked the access for this site, you can unblock it from your browser settings page. On Chrome, you cango to chrome://settings/content/microphone"
+			);
 		} else {
 			// wipe old data chunks
-			this.state.recordedChunks = [];
+			this.setState({ recordedChunks: [] });
+			// this.state.recordedChunks = [];
 			// start recorder with 10ms buffer
 			this.mediaRecorder.start(10);
 			this.startTimer();
@@ -152,18 +151,6 @@ class Recorder extends Component {
 			this.setState({ recording: true });
 		}
 	}
-
-	// Commenting out startRecording to test it into checkMicPermissionBeforeStart()
-	/* startRecording(e) {
-  e.preventDefault();
-  // wipe old data chunks
-  this.chunks = [];
-  // start recorder with 10ms buffer
-  this.mediaRecorder.start(10);
-  this.startTimer();
-  // say that we're recording
-  this.setState({ recording: true });
-} */
 
 	stopRecording(e) {
 		clearInterval(this.timer);
@@ -208,34 +195,54 @@ class Recorder extends Component {
 		);
 	}
 
+	handleReset(e) {
+		if (this.state.recording) {
+			this.stopRecording(e);
+		}
+		this.setState(
+			{
+				time: {},
+				seconds: 0,
+				recording: false,
+				recorded: false,
+				medianotFound: false,
+				mic_access_granted: false,
+				audios: [],
+				audio_title: "",
+				audio_tags: [],
+				audioBlob: null,
+			},
+			() => {
+				this.props.handleReset(this.state);
+			}
+		);
+	}
+
+	handleAudioUpload() {
+		this.props.handleAudioUpload(this.state);
+	}
+
 	render() {
 		return (
 			<div className={styles.recorder_library_box}>
-				<div className={styles.recorder_box}>
-					<div className={styles.recorder_box_inner}>
-						{/* {audioURL !== null && showUIAudio ? (	) : null} */}
-						{true ? (
-							<NewAudioRecorder
-								// recording={this.state.recording}
-								// recorded={this.state.recorded}
-								// mic_access_granted={this.state.mic_access_granted}
-								// time={this.state.time}
-								// medianotFound={this.state.medianotFound}
-								// pauseRecord={this.state.pauseRecord}
-
-								recorderState={this.state}
-								checkMicPermissionBeforeStart={
-									this.checkMicPermissionBeforeStart
-								}
-							/>
-						) : (
-							<NewAudioPlayback
-								audioURL={this.props.audioDetails.url}
-								showUIAudio
-								audios={this.state.audios}
-							/>
-						)}
-					</div>
+				<div className={styles.recorder_box_inner}>
+					{!this.state.recorded ? (
+						<NewAudioRecorder
+							recorderState={this.state}
+							checkMicPermissionBeforeStart={this.checkMicPermissionBeforeStart}
+							stopRecording={this.stopRecording}
+							handleAudioStart={this.handleAudioStart}
+							handleAudioPause={this.handleAudioPause}
+						/>
+					) : (
+						<NewAudioPlayback
+							audioURL={this.props.audioDetails.url}
+							showUIAudio
+							audios={this.state.audios}
+							handleReset={this.handleReset}
+							handleAudioUpload={this.handleAudioUpload}
+						/>
+					)}
 				</div>
 			</div>
 		);

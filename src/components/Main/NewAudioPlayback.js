@@ -1,43 +1,17 @@
 import React from "react";
 
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
-import styles from "../../recorder.module.css";
 import "react-h5-audio-player/lib/styles.css";
-import "../../audio-player-customization.css";
+import styles from "../../recorder.module.css";
 import { Form, Button } from "react-bootstrap";
 
 // remember to keep the custom.css file at the bottom for overriding the styles accordingly.
 import "../../audio-player-customization.css";
 
-const NewAudioPlayback = ({ audioURL, showUIAudio, audios }) => {
-	function handleReset(e) {
-		if (this.state.recording) {
-			this.stopRecording(e);
-		}
-		this.setState(
-			{
-				time: {},
-				seconds: 0,
-				recording: false,
-				recorded: false,
-				medianotFound: false,
-				mic_access_granted: true,
-				audios: [],
-				audio_title: "",
-				audio_tags: [],
-				audioBlob: null,
-			},
-			() => {
-				this.props.handleReset(this.state);
-			}
-		);
-	}
-
-	function handleAudioUpload() {}
-
+const NewAudioPlayback = ({ audios, handleReset, handleAudioUpload }) => {
 	return (
 		<div className={styles.audio_section}>
-			<h3>"Audio preview"</h3>
+			<h3>Audio preview</h3>
 			<AudioPlayer
 				style={{ width: "300px" }}
 				src={audios[0]}
@@ -68,7 +42,7 @@ const NewAudioPlayback = ({ audioURL, showUIAudio, audios }) => {
 					<Form.Text className='text-muted'>Separte tags by commas.</Form.Text>
 				</Form.Group>
 				<Button
-					// onClick={() => this.props.handleAudioUpload(this.state.audioBlob)}
+					onClick={handleAudioUpload}
 					className={`${styles.btn} ${styles.upload_btn}`}
 					// disabled={this.props.uploadButtonDisabled}
 				>
@@ -76,7 +50,7 @@ const NewAudioPlayback = ({ audioURL, showUIAudio, audios }) => {
 				</Button>
 
 				<Button
-					onClick={(e) => handleReset(e)}
+					onClick={handleReset}
 					className={`${styles.btn} ${styles.clear_btn}`}
 				>
 					Clear

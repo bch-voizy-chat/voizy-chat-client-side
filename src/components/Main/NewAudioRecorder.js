@@ -1,85 +1,46 @@
-import React, { Component } from "react";
+import React from "react";
 import styles from "../../recorder.module.css";
-import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import "../../audio-player-customization.css";
-import { Form, Button } from "react-bootstrap";
 
-const audioType = "audio/*";
+const NewAudioRecorder = ({
+	recorderState,
+	checkMicPermissionBeforeStart,
+	stopRecording,
+	handleAudioStart,
+	handleAudioPause,
+}) => {
+	const { time, recording, medianotFound, pauseRecord } = recorderState;
 
-class NewAudioRecorder extends Component {
-	render() {
-		const { recorderState, checkMicPermissionBeforeStart } = this.props;
-
-		const {
-			time,
-			seconds,
-			record,
-			recording,
-			recorded,
-			mic_access_granted,
-			medianotFound,
-			pauseRecord,
-			audios,
-			audio_title,
-			audio_tags,
-			audioBlob,
-			mimeTypeToUseWhenRecording,
-			recordedChunks,
-		} = recorderState;
-		const { showUIAudio, title, audioURL } = this.props;
-
-		return (
-			<>
-				{!medianotFound ? (
-					<div className={styles.record_section}>
-						{/* Prev. Uplodad and Clear buttons */}
-
-						<div className={styles.duration_section}>
-							{/* Prev. Audio Preview */}
-
-							{!recorded && mic_access_granted ? (
-								<div className={styles.duration}>
-									<span className={styles.mins}>
-										{time.m !== undefined
-											? `${time.m <= 9 ? "0" + time.m : time.m}`
-											: "00"}
-									</span>
-									<span className={styles.divider}>:</span>
-									<span className={styles.secs}>
-										{time.s !== undefined
-											? `${time.s <= 9 ? "0" + time.s : time.s}`
-											: "00"}
-									</span>
-								</div>
-							) : null}
-
-							{!recording && !recorded && mic_access_granted ? (
-								<p className={styles.help}>Press the microphone to record</p>
-							) : recording &&
-							  !recorded &&
-							  mic_access_granted ? null : !recording &&
-							  recorded &&
-							  mic_access_granted ? null : !recording &&
-							  !recorded &&
-							  !mic_access_granted ? null : (
-								<p className={styles.help}>
-									You need to grant access to your device microphone to be able
-									to record audio. If you have blocked the access for this site,
-									you can unblock it from your browser settings page. On Chrome,
-									you can go to chrome://settings/content/microphone
-								</p>
-							)}
+	return (
+		<>
+			{medianotFound ? (
+				<p style={{ color: "#fff", marginTop: 30, fontSize: 25 }}>
+					Seems the site is Non-SSL
+				</p>
+			) : (
+				<div className={styles.record_section}>
+					<div className={styles.duration_section}>
+						<div className={styles.duration}>
+							<span className={styles.mins}>
+								{time.m !== undefined
+									? `${time.m <= 9 ? "0" + time.m : time.m}`
+									: "00"}
+							</span>
+							<span className={styles.divider}>:</span>
+							<span className={styles.secs}>
+								{time.s !== undefined
+									? `${time.s <= 9 ? "0" + time.s : time.s}`
+									: "00"}
+							</span>
 						</div>
-
-						{!recording && !recorded && mic_access_granted ? (
-							<a
-								// onClick={e => this.startRecording(e)}
-								onClick={(e) => checkMicPermissionBeforeStart(e)}
-								href=' #'
+					</div>
+					<div className={styles.record_controller}>
+						{!recording ? (
+							<button
+								onClick={checkMicPermissionBeforeStart}
 								className={styles.mic_icon}
 							>
-								{/* <img src={microphone} width={30} height={30} alt="Microphone icons" /> */}
 								<span className={styles.microphone_icon_sec}>
 									<svg
 										className={styles.mic_icon_svg}
@@ -95,26 +56,17 @@ class NewAudioRecorder extends Component {
 										</g>
 									</svg>
 								</span>
-							</a>
-						) : !recorded && mic_access_granted ? (
-							<div className={styles.record_controller}>
-								<a
-									onClick={(e) => this.stopRecording(e)}
-									href=' #'
+							</button>
+						) : (
+							<>
+								<button
+									onClick={stopRecording}
 									className={`${styles.icons} ${styles.stop}`}
 								>
 									<span className={styles.stop_icon}></span>
-									{/* <img src={stopIcon} width={20} height={20} alt="Stop icons" /> */}
-
-									{/* <span className={`${styles.icons} ${styles.FaStop}`}></span> */}
-								</a>
-								<a
-									onClick={
-										!pauseRecord
-											? (e) => this.handleAudioPause(e)
-											: (e) => this.handleAudioStart(e)
-									}
-									href=' #'
+								</button>
+								<button
+									onClick={pauseRecord ? handleAudioStart : handleAudioPause}
 									className={`${styles.icons} ${styles.pause}`}
 								>
 									{pauseRecord ? (
@@ -122,18 +74,14 @@ class NewAudioRecorder extends Component {
 									) : (
 										<span className={styles.pause_icons}></span>
 									)}
-								</a>
-							</div>
-						) : null}
+								</button>
+							</>
+						)}
 					</div>
-				) : (
-					<p style={{ color: "#fff", marginTop: 30, fontSize: 25 }}>
-						Seems the site is Non-SSL
-					</p>
-				)}
-			</>
-		);
-	}
-}
+				</div>
+			)}
+		</>
+	);
+};
 
 export default NewAudioRecorder;

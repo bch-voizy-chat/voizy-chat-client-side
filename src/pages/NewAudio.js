@@ -9,7 +9,6 @@ const NewAudio = (props) => {
 		/** If the new audio is a comment, a threadId is associated to it */
 		threadId = props.location.state.threadId;
 	}
-
 	const [audioDetails, setAudioDetails] = useState({
 		url: null,
 		blob: null,
@@ -26,8 +25,8 @@ const NewAudio = (props) => {
 		setAudioDetails(data);
 	}
 
-	function handleAudioUpload(file) {
-		console.log(file);
+	function handleAudioUpload() {
+		console.log(audioDetails.blob);
 	}
 
 	function handleReset() {
