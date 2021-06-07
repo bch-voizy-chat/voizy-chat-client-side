@@ -1,29 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 import Thread from "../components/Main/Thread";
 
-const Home = () => {
+const Home = ({ threads }) => {
 	const { currentUser } = useAuth();
 	const userLoggedIn = Object.keys(currentUser).length;
 	/** [1,2,3] for dev purpose */
-	const [threads, setThreads] = useState([]);
-
-	const fetchData = async () => {
-		try {
-			let res = await axios.get("http://localhost:3001/threads");
-			setThreads(res.data);
-		} catch (err) {
-			console.log(err);
-		}
-	};
-
-	useEffect(fetchData, []);
+	// const [threads, setThreads] = useState(threads);
 
 	const threadList = threads.map((thread) => {
-		return <Thread key={thread.id} thread={thread} />;
+		return <Thread key={thread.threadId} thread={thread} />;
 	});
 
 	return (
@@ -54,7 +42,6 @@ const Home = () => {
 			<p>
 				All threads; {userLoggedIn ? "User is logged in" : "No users logged in"}
 			</p>
-			{console.log(threads)}
 
 			<section>{threadList}</section>
 		</div>
