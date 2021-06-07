@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const Thread = ({ thread }) => {
 	const location = useLocation();
+	const [likeCount, setLikeCount] = useState(0);
 	const [like, setLike] = useState(false);
 	const likeHandler = () => {
 		if (like) {
