@@ -93,39 +93,50 @@ class Recorder extends Component {
 		return obj;
 	}
 
-	async componentDidMount() {
+	async componentDidMount() {}
+
+	checkMicPermissionBeforeStart() {
 		navigator.getUserMedia =
 			navigator.getUserMedia ||
 			navigator.webkitGetUserMedia ||
 			navigator.mozGetUserMedia ||
 			navigator.msGetUserMedia;
 		if (navigator.mediaDevices) {
-			const stream = await await navigator.mediaDevices.getUserMedia({
-				audio: true,
-			});
-			// .then(() => this.setState({ mic_access_granted: true })).catch(notSupported())
-			/* 			console.log(
-				`The typeof stream ${
-					typeof stream === "object" ? "is an object" : "is not an object"
-				} on navigator.mediaDevice.getUserMedia`
-			); */
-			if (typeof stream === "object") {
-				this.setState({ mic_access_granted: true });
-				console.log(`mic_access_granted is true`);
-			}
-			if (this.state.mimeTypeToUseWhenRecording) {
-				this.mediaRecorder = new MediaRecorder(stream, {
-					mimeType: this.state.mimeTypeToUseWhenRecording,
+			navigator.mediaDevices
+				.getUserMedia({ audio: true })
+				.then((stream) => {
+					this.setState({ localStream: stream });
+					if (typeof stream === "object") {
+						this.setState({ mic_access_granted: true });
+						console.log(`mic_access_granted is true`);
+					}
+					if (this.state.mimeTypeToUseWhenRecording) {
+						this.mediaRecorder = new MediaRecorder(stream, {
+							mimeType: this.state.mimeTypeToUseWhenRecording,
+						});
+					} else {
+						this.mediaRecorder = new MediaRecorder(stream);
+					}
+					this.state.recordedChunks = [];
+					this.mediaRecorder.ondataavailable = (e) => {
+						if (e.data && e.data.size > 0) {
+							this.state.recordedChunks.push(e.data);
+						}
+					};
+					// wipe old data chunks
+					this.setState({ recordedChunks: [] });
+					// this.state.recordedChunks = [];
+					// start recorder with 10ms buffer
+					this.mediaRecorder.start(0);
+					this.startTimer();
+					// say that we're recording
+					this.setState({ recording: true });
+				})
+				.catch(() => {
+					alert(
+						"You need to grant access to your device microphone to be able to record audio. If you have blocked the access for this site, you can unblock it from your browser settings page. On Chrome, you cango to chrome://settings/content/microphone"
+					);
 				});
-			} else {
-				this.mediaRecorder = new MediaRecorder(stream);
-			}
-			this.state.recordedChunks = [];
-			this.mediaRecorder.ondataavailable = (e) => {
-				if (e.data && e.data.size > 0) {
-					this.state.recordedChunks.push(e.data);
-				}
-			};
 		} else {
 			this.setState({ medianotFound: true });
 			this.setState({ mic_access_granted: false });
@@ -136,29 +147,13 @@ class Recorder extends Component {
 		}
 	}
 
-	checkMicPermissionBeforeStart() {
-		if (!this.state.mic_access_granted) {
-			console.log(this.state.mic_access_granted);
-
-			alert(
-				"You need to grant access to your device microphone to be able to record audio. If you have blocked the access for this site, you can unblock it from your browser settings page. On Chrome, you cango to chrome://settings/content/microphone"
-			);
-		} else {
-			// wipe old data chunks
-			this.setState({ recordedChunks: [] });
-			// this.state.recordedChunks = [];
-			// start recorder with 10ms buffer
-			this.mediaRecorder.start(10);
-			this.startTimer();
-			// say that we're recording
-			this.setState({ recording: true });
-		}
-	}
-
-	stopRecording(e) {
+	stopRecording() {
 		clearInterval(this.timer);
 		this.setState({ time: {} });
-		e.preventDefault();
+		this.state.localStream.getTracks().forEach((track) => {
+			track.stop();
+		});
+		this.setState({ localStream: null });
 		// stop the recorder
 		this.mediaRecorder.stop();
 		// say that we're not recording
