@@ -78,7 +78,7 @@ export function AuthProvider({ children }) {
 			.post(url, data)
 			.then((res) => {
 				let user = {
-					email: res.data.email,
+					userId: res.data.userId,
 					password: res.data.password,
 				};
 				setUserCookie(user);
