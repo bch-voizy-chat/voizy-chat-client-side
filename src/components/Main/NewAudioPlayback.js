@@ -25,7 +25,7 @@ const NewAudioPlayback = ({ audios, handleReset, handleAudioUpload }) => {
 					// RHAP_UI.CURRENT_LEFT_TIME,
 				]}
 			/>
-			<Form>
+			<Form id="newAudioForm">
 				<Form.Group className='mb-3' controlId='audioTitle'>
 					<Form.Label>Audio title</Form.Label>
 					<Form.Control as='textarea' rows={2} placeholder='My Audio Title' />
@@ -41,6 +41,9 @@ const NewAudioPlayback = ({ audios, handleReset, handleAudioUpload }) => {
 					/>
 					<Form.Text className='text-muted'>Separte tags by commas.</Form.Text>
 				</Form.Group>
+
+				<input type="hidden" name="hiddenvalue" id="hiddenvalue" value="someHiddenValue"></input>
+
 				<Button
 					onClick={handleAudioUpload}
 					className={`${styles.btn} ${styles.upload_btn}`}
