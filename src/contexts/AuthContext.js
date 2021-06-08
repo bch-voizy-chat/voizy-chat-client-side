@@ -29,10 +29,10 @@ export function AuthProvider({ children }) {
 	/** for dev purpose, comment out useEffect and set default to 0 for not logged in, or 1 for logged in */
 	const [isLoggedIn, setIsLoggedIn] = useState(1);
 
-	// 	useEffect(
-	// 	() => setIsLoggedIn(Object.keys(currentUser).length),
-	// 	[currentUser]
-	// );
+	useEffect(
+		() => setIsLoggedIn(Object.keys(currentUser).length),
+		[currentUser]
+	);
 
 	const signup = (email, password, username) => {
 		const data = {
@@ -41,8 +41,10 @@ export function AuthProvider({ children }) {
 			username: username,
 		};
 		/** server signup url */
-		const url =
-			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/signup";
+		// const url =
+		// "https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/signup";
+
+		const url = "https://httpbin.org/post";
 
 		return axios
 			.post(url, data)
@@ -73,6 +75,9 @@ export function AuthProvider({ children }) {
 		/** server login url */
 		const url =
 			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/login";
+
+		// const url =
+		// 	"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread";
 
 		return axios
 			.post(url, data)
