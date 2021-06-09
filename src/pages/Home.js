@@ -21,7 +21,9 @@ const Home = () => {
 		}
 	};
 
-	useEffect(fetchData, []);
+	useEffect(() => {
+		fetchData();
+	}, []);
 
 	const threadList = threads.map((thread) => {
 		return <Thread key={thread.threadId} thread={thread} />;

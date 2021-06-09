@@ -41,7 +41,6 @@ const Thread = ({ thread }) => {
 		return `${da}/${mo}/${ye}, ${hr}:${min}`;
 	};
 
-	const shareHandler = () => console.log("share!");
 	const shareData = {
 		title: "Thread title",
 		text: "Listen to what [username] has to say",

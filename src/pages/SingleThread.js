@@ -20,7 +20,7 @@ const SingleThread = () => {
 	});
 	const [comments, setComments] = useState([]);
 
-	const fetchData = async () => {
+	const fetchData = async (threadId) => {
 		try {
 			let res = await axios.get(
 				`https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/threads/${threadId}`
@@ -33,7 +33,9 @@ const SingleThread = () => {
 		}
 	};
 
-	useEffect(fetchData, []);
+	useEffect(() => {
+		fetchData(threadId);
+	}, [threadId]);
 
 	const commentList = comments.map((comment) => {
 		return (

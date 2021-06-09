@@ -108,7 +108,7 @@ class Recorder extends Component {
 					} else {
 						this.mediaRecorder = new MediaRecorder(stream);
 					}
-					this.state.recordedChunks = [];
+					this.setState({ recordedChunks: [] });
 					this.mediaRecorder.ondataavailable = (e) => {
 						if (e.data && e.data.size > 0) {
 							this.state.recordedChunks.push(e.data);
@@ -116,7 +116,6 @@ class Recorder extends Component {
 					};
 					// wipe old data chunks
 					this.setState({ recordedChunks: [] });
-					// this.state.recordedChunks = [];
 					// start recorder with 10ms buffer
 					this.mediaRecorder.start(0);
 					this.startTimer();

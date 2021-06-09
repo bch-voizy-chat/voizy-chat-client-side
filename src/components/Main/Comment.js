@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import PlayerComponent from "./PlayerComponent";
 
 const Comment = ({ response }) => {
-	const [comment, setComment] = useState(response);
-
 	const formatDate = (date) => {
 		let d = new Date(date);
 		let ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
@@ -16,6 +14,7 @@ const Comment = ({ response }) => {
 	};
 
 	const [like, setLike] = useState(false);
+	const [likeCount, setLikeCount] = useState(0);
 	const likeHandler = () => {
 		if (like) {
 			setLike(false);
@@ -35,16 +34,16 @@ const Comment = ({ response }) => {
 	return (
 		<div className='comment audio-container'>
 			<p>
-				<strong>{comment.responsePosterUserName}</strong>
-				{" - "}
+				<strong>{response.responsePosterUserName}</strong>
+				{" replied - "}
 				<span className='text-muted'>
-					{formatDate(comment.responsePostDate)}
+					{formatDate(response.responsePostDate)}
 				</span>
 			</p>
-			<PlayerComponent audioPath={comment.responseAudioPath} />
+			<PlayerComponent audioPath={response.responseAudioPath} />
 			<div className='d-flex justify-content-end thread__icon-container'>
 				<button className={likeBtnClass} onClick={likeHandler}>
-					{comment.responseLikes}
+					{response.responseLikes}
 					<span className='visually-hidden'>likes. Like</span>
 				</button>
 			</div>
