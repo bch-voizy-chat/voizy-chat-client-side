@@ -7,7 +7,6 @@ import Comment from "../components/Main/Comment";
 
 const SingleThread = () => {
 	const { threadId } = useParams();
-	console.log(threadId);
 
 	const [thread, setThread] = useState({
 		threadAudioPath: "",
@@ -26,7 +25,6 @@ const SingleThread = () => {
 			let res = await axios.get(
 				`https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/threads/${threadId}`
 			);
-
 			setComments(res.data.responses);
 			setThread(res.data.thread);
 			console.log(res.data);
@@ -53,8 +51,8 @@ const SingleThread = () => {
 					state: {
 						message: "new comment",
 						status: 1,
-						threadId: threadId,
-						threadPosterUserName: threadPosterUserName,
+						threadId: thread.threadId,
+						threadPosterUserName: thread.threadPosterUserName,
 					},
 				}}
 				className='squishy new-audio-link'
