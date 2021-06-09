@@ -21,13 +21,13 @@ const SingleThread = () => {
 	const [comments, setComments] = useState([]);
 
 	const fetchData = async (threadId) => {
+		console.log("newthread");
 		try {
 			let res = await axios.get(
 				`https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/threads/${threadId}`
 			);
 			setComments(res.data.responses);
 			setThread(res.data.thread);
-			console.log(res.data);
 		} catch (err) {
 			console.log(err);
 		}

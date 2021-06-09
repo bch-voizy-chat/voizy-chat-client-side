@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useAuth } from "../../contexts/AuthContext";
 
 import PlayerComponent from "./PlayerComponent";
 
 const Comment = ({ response }) => {
+	const { currentUser } = useAuth();
+
 	const formatDate = (date) => {
 		let d = new Date(date);
 		let ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
@@ -13,8 +17,10 @@ const Comment = ({ response }) => {
 		return `${da}/${mo}/${ye}, ${hr}:${min}`;
 	};
 
-	const [like, setLike] = useState(false);
-	const [likeCount, setLikeCount] = useState(0);
+	const storedLike = localStorage.getItem(`${response.responseId} liked`);
+
+	const [like, setLike] = useState(storedLike);
+	const [likeCount, setLikeCount] = useState(response.responseLikes);
 	const likeHandler = () => {
 		if (like) {
 			setLike(false);
@@ -24,6 +30,21 @@ const Comment = ({ response }) => {
 			setLike(true);
 			setLikeCount(likeCount + 1);
 			/** Post update */
+			if (!storedLike) {
+				const responseLikeUrl =
+					"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/likeResponse";
+				const data = {
+					userid: currentUser.userId,
+					password: currentUser.password,
+					threadId: response.responseToThreadId,
+					responseId: response.responseId,
+				};
+				axios
+					.post(responseLikeUrl, data)
+					.then((res) => console.log(res))
+					.catch((err) => console.log(err));
+				localStorage.setItem(`${response.responseId} liked`, true);
+			}
 		}
 	};
 
@@ -43,7 +64,7 @@ const Comment = ({ response }) => {
 			<PlayerComponent audioPath={response.responseAudioPath} />
 			<div className='d-flex justify-content-end thread__icon-container'>
 				<button className={likeBtnClass} onClick={likeHandler}>
-					{response.responseLikes}
+					{likeCount}
 					<span className='visually-hidden'>likes. Like</span>
 				</button>
 			</div>
