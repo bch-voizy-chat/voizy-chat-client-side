@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";
+import { useHistory } from "react-router-dom";
 
 import PlayerComponent from "./PlayerComponent";
 
 const Comment = ({ response }) => {
-	const { currentUser } = useAuth();
+	const { currentUser, isLoggedIn } = useAuth();
+	const history = useHistory();
 
 	const formatDate = (date) => {
 		let d = new Date(date);
@@ -13,7 +15,7 @@ const Comment = ({ response }) => {
 		let mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
 		let da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
 		let hr = d.getHours();
-		let min = d.getMinutes();
+		let min = d.getMinutes().toString().padStart(2, "0");
 		return `${da}/${mo}/${ye}, ${hr}:${min}`;
 	};
 
@@ -22,7 +24,12 @@ const Comment = ({ response }) => {
 	const [like, setLike] = useState(storedLike);
 	const [likeCount, setLikeCount] = useState(response.responseLikes);
 	const likeHandler = () => {
-		if (like) {
+		if (!isLoggedIn) {
+			history.push({
+				pathname: "/login",
+				state: { message: "user not logged in", status: 400 },
+			});
+		} else if (like) {
 			setLike(false);
 			setLikeCount(likeCount - 1);
 			/** Post update: likeCount + if user liked the post. */

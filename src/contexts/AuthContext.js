@@ -9,8 +9,6 @@ const setUserCookie = (user) => {
 
 const getUserCookie = () => {
 	const userCookie = Cookies.get("user");
-	console.log("getting cookie");
-
 	if (userCookie === undefined) {
 		return {};
 	} else {
@@ -41,10 +39,8 @@ export function AuthProvider({ children }) {
 			username: username,
 		};
 		/** server signup url */
-		// const url =
-		// "https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/signup";
-
-		const url = "https://httpbin.org/post";
+		const url =
+			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/signup";
 
 		return axios
 			.post(url, data)
@@ -85,6 +81,7 @@ export function AuthProvider({ children }) {
 				let user = {
 					userId: res.data.userId,
 					password: res.data.password,
+					email: email,
 				};
 				setUserCookie(user);
 				setCurrentUser(user);

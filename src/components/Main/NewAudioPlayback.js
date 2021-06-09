@@ -10,6 +10,7 @@ const NewAudioPlayback = ({
 	setAudioTitle,
 	setAudioTags,
 	isComment,
+	isLoading,
 }) => {
 	const [tags, setTags] = useState([]);
 	const [error, setError] = useState("");
@@ -67,7 +68,7 @@ const NewAudioPlayback = ({
 
 	return (
 		<div>
-			<h2>Audio Preview</h2>
+			<h3 className='my-2 text-center'>Audio Preview</h3>
 			<Form className='flow form-flow' id='newAudioForm'>
 				<AudioPlayer
 					style={{ width: "300px" }}
@@ -124,8 +125,12 @@ const NewAudioPlayback = ({
 					value='someHiddenValue'
 				></input>
 
-				<Button onClick={handleSubmit} className='squishy w-100 mt-3'>
-					Upload
+				<Button
+					onClick={handleSubmit}
+					className='squishy w-100 mt-3'
+					disabled={isLoading}
+				>
+					{isLoading ? "Loading…" : "Upload"}
 				</Button>
 				<Button
 					onClick={handleReset}

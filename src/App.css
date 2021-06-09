@@ -51,11 +51,16 @@ ul {
 	box-shadow: var(--box-shadow-outline);
 }
 
-/* .btn-outline-secondary {
-	color: var(--color-orange);
-	border-color: var(--color-orange);
-	text-align: right;
-} */
+.btn-outline-secondary {
+	color: var(--color-purple);
+	border-color: var(--color-purple);
+}
+
+.btn-outline-secondary:hover {
+	background-color: var(--color-purple);
+	border-color: var(--color-purple);
+	opacity: 0.9;
+}
 
 /* Nav */
 

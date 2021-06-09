@@ -3,10 +3,11 @@ import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 
 import PlayerComponent from "./PlayerComponent";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 
 const Thread = ({ thread }) => {
-	const { currentUser } = useAuth();
+	const { currentUser, isLoggedIn } = useAuth();
+	const history = useHistory();
 	const location = useLocation();
 
 	const storedLike = localStorage.getItem(`${thread.threadId} liked`);
@@ -15,13 +16,18 @@ const Thread = ({ thread }) => {
 	const [likeCount, setLikeCount] = useState(thread.threadLikes);
 
 	useEffect(() => {
-		if (location.pathname !== "/") {
+		if (location.pathname !== "/" && !likeCount) {
 			setLikeCount(likeCount + thread.threadLikes);
 		}
-	}, [thread.threadLikes]);
+	}, [location.pathname, likeCount, thread.threadLikes]);
 
 	const likeHandler = () => {
-		if (like) {
+		if (!isLoggedIn) {
+			history.push({
+				pathname: "/login",
+				state: { message: "user not logged in", status: 400 },
+			});
+		} else if (like) {
 			setLike(false);
 			setLikeCount(likeCount - 1);
 			/** Post update: likeCount + if user liked the post. */
@@ -64,7 +70,7 @@ const Thread = ({ thread }) => {
 		let mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
 		let da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
 		let hr = d.getHours();
-		let min = d.getMinutes();
+		let min = d.getMinutes().toString().padStart(2, "0");
 		return `${da}/${mo}/${ye}, ${hr}:${min}`;
 	};
 
@@ -74,11 +80,17 @@ const Thread = ({ thread }) => {
 		url: `/conversation/${thread}`,
 	};
 	const shareHandler = async () => {
-		try {
-			await navigator.share(shareData);
-			console.log("shared!");
-		} catch (err) {
-			console.log(err);
+		if (!isLoggedIn) {
+			history.push({
+				pathname: "/login",
+				state: { message: "user not logged in", status: 400 },
+			});
+		} else {
+			try {
+				await navigator.share(shareData);
+			} catch (err) {
+				console.log(err);
+			}
 		}
 	};
 
