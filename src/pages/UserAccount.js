@@ -1,8 +1,6 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { useAuth } from "../contexts/AuthContext";
 const UserAccount = () => {
-	const { logout } = useAuth();
 	return (
 		<div
 			className='flow d-flex flex-column mx-auto pt-5 text-center'

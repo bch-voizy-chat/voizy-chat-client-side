@@ -2,7 +2,19 @@ import React, { useState } from "react";
 
 import PlayerComponent from "./PlayerComponent";
 
-const Comment = ({ comment }) => {
+const Comment = ({ response }) => {
+	const [comment, setComment] = useState(response);
+
+	const formatDate = (date) => {
+		let d = new Date(date);
+		let ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
+		let mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
+		let da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
+		let hr = d.getHours();
+		let min = d.getMinutes();
+		return `${da}/${mo}/${ye}, ${hr}:${min}`;
+	};
+
 	const [like, setLike] = useState(false);
 	const likeHandler = () => {
 		console.log("like!");
@@ -15,11 +27,18 @@ const Comment = ({ comment }) => {
 
 	return (
 		<div className='comment audio-container'>
-			<h4>Comment {comment}</h4>
-			<PlayerComponent />
+			<p>
+				<strong>{comment.responsePosterUserName}</strong>
+				{" - "}
+				<span className='text-muted'>
+					{formatDate(comment.responsePostDate)}
+				</span>
+			</p>
+			<PlayerComponent audioPath={comment.responseAudioPath} />
 			<div className='d-flex justify-content-end thread__icon-container'>
 				<button className={likeBtnClass} onClick={likeHandler}>
-					96<span className='visually-hidden'>likes. Like</span>
+					{comment.responseLikes}
+					<span className='visually-hidden'>likes. Like</span>
 				</button>
 			</div>
 		</div>
