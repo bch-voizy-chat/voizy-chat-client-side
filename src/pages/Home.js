@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import Thread from "../components/Main/Thread";
 
-const Home = ({ threads }) => {
+const Home = () => {
 	const { currentUser } = useAuth();
 	const userLoggedIn = Object.keys(currentUser).length;
-	/** [1,2,3] for dev purpose */
-	// const [threads, setThreads] = useState(threads);
+
+	const [threads, setThreads] = useState([]);
+	const fetchData = async () => {
+		try {
+			let res = await axios.get(
+				"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/threads"
+			);
+			setThreads(res.data);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	useEffect(fetchData, []);
 
 	const threadList = threads.map((thread) => {
 		return <Thread key={thread.threadId} thread={thread} />;

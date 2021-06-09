@@ -15,20 +15,32 @@ const Thread = ({ thread }) => {
 		like && "liked"
 	}`;
 
-	const regex = /[a-zA-Z ]/g;
-	let tags = thread.threadTags.match(regex);
-	tags = "#" + tags.join("").replace(" ", " #");
+	const formatTags = (tags) => {
+		let tagStr = "";
+		tags.forEach((tag) => {
+			console.log(tag);
+			tagStr += "#" + tag.replaceAll(" ", "-") + " ";
+		});
+		return tagStr;
+	};
+
+	const formatDate = (date) => {
+		let d = new Date(date);
+		let ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
+		let mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
+		let da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
+		return `${da}/${mo}/${ye}`;
+	};
 
 	const shareHandler = () => console.log("share!");
 	return (
 		<article className='thread audio-container'>
 			<p className='mb-0'>
 				<strong>{thread.threadPosterUserName}</strong> -{" "}
-				<span className='text-muted'>{thread.threadPostDate}</span>
+				<span className='text-muted'>{formatDate(thread.threadPostDate)}</span>
 			</p>
-			<h3 className='thread__title'>
-				{thread.threadName} <span className='thread__tags'>{tags}</span>
-			</h3>
+			<h3 className='thread__title'>{thread.threadTitle}</h3>
+			<p className='thread__tags'>{formatTags(thread.threadTags)}</p>
 			<PlayerComponent audioPath={thread.threadAudioPath} />
 
 			<div className='d-flex justify-content-between thread__icon-container'>
@@ -36,12 +48,7 @@ const Thread = ({ thread }) => {
 					className='d-flex align-items-center  comment-link thread__icon thread__icon--comment squishy'
 					to={
 						location.pathname === "/"
-							? {
-									pathname: `/conversation/${thread.threadId}`,
-									state: {
-										thread: thread,
-									},
-							  }
+							? `/conversation/${thread.threadId}`
 							: {
 									pathname: "/new",
 									state: {

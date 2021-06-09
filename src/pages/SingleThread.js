@@ -5,19 +5,21 @@ import axios from "axios";
 import Thread from "../components/Main/Thread";
 import Comment from "../components/Main/Comment";
 
-const SingleThread = (props) => {
-	console.log(props.location.state.thread);
-	const thread = props.location.state.thread;
+const SingleThread = () => {
+	const { threadId } = useParams();
+	console.log(threadId);
+
+	const [thread, setThread] = useState({});
 	const [comments, setComments] = useState([]);
 
 	const fetchData = async () => {
 		try {
 			let res = await axios.get(
-				`https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/responses/${thread.threadId}`
+				`https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/threads/${threadId}`
 			);
 
-			setComments(res.data);
-			console.log(res.data);
+			setComments(res.data.responses);
+			setThread(res.data.thread);
 		} catch (err) {
 			console.log(err);
 		}
