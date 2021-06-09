@@ -73,6 +73,7 @@ const NewAudioPlayback = ({
 				<AudioPlayer
 					style={{ width: "300px" }}
 					src={audios[0]}
+					timeFormat={"mm:ss"}
 					customAdditionalControls={[]}
 					customVolumeControls={[]}
 					showJumpControls={false}
