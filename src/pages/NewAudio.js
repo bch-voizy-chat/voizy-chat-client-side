@@ -3,63 +3,6 @@ import { useAuth } from "../contexts/AuthContext";
 
 import Recorder from "../components/Main/Recorder";
 
-// function NewAudio() {
-// 	const [selectedFile, setSelectedFile] = useState();
-// 	const [isSelected, setIsSelected] = useState(false);
-
-// 	const changeHandler = (event) => {
-// 		setSelectedFile(event.target.files[0]);
-// 		setIsSelected(true);
-// 	};
-
-// 	const handleSubmission = () => {
-// 		const formData = new FormData();
-
-// 		formData.append("file", selectedFile);
-// 		formData.append("userid", "fEwPXPFf4wGnS7WHg7m7");
-// 		formData.append("password", "abcd");
-// 		formData.append("threadtags", '["test","test from browser"]');
-// 		formData.append("threadTitle", "browser test");
-
-// 		fetch(
-// 			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread",
-// 			{
-// 				method: "POST",
-// 				body: formData,
-// 			}
-// 		)
-// 			.then((response) => response.json())
-// 			.then((result) => {
-// 				console.log("Success:", result);
-// 			})
-// 			.catch((error) => {
-// 				console.error("Error:", error);
-// 			});
-// 	};
-
-// 	return (
-// 		<div>
-// 			<input type='file' name='file' onChange={changeHandler} />
-// 			{isSelected ? (
-// 				<div>
-// 					<p>Filename: {selectedFile.name}</p>
-// 					<p>Filetype: {selectedFile.type}</p>
-// 					<p>Size in bytes: {selectedFile.size}</p>
-// 					<p>
-// 						lastModifiedDate:{" "}
-// 						{selectedFile.lastModifiedDate.toLocaleDateString()}
-// 					</p>
-// 				</div>
-// 			) : (
-// 				<p>Select a file to show details</p>
-// 			)}
-// 			<div>
-// 				<button onClick={handleSubmission}>Submit</button>
-// 			</div>
-// 		</div>
-// 	);
-// }
-
 const NewAudio = (props) => {
 	const { currentUser } = useAuth();
 	const [audioTags, setAudioTags] = useState([]);

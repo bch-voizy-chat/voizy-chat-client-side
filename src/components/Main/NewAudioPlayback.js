@@ -2,9 +2,6 @@ import React, { useState } from "react";
 
 import { Form, Button } from "react-bootstrap";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
-import "react-h5-audio-player/lib/styles.css";
-// remember to keep the custom.css file at the bottom for overriding the styles accordingly.
-import "../../audio-player-customization.css";
 
 const NewAudioPlayback = ({
 	audios,
@@ -84,7 +81,7 @@ const NewAudioPlayback = ({
 					// RHAP_UI.CURRENT_LEFT_TIME,
 				]}
 			/>
-			<Form id='newAudioForm'>
+			<Form className='flow form-flow' id='newAudioForm'>
 				<Form.Group className='mb-3' controlId='audioTitle'>
 					<Form.Label>Audio title</Form.Label>
 					<Form.Control

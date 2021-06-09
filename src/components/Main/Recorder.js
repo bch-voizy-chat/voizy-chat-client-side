@@ -17,8 +17,6 @@ import NewAudioRecorder from "../Main/NewAudioRecorder";
 import NewAudioPlayback from "../Main/NewAudioPlayback";
 
 import styles from "../../recorder.module.css";
-import "react-h5-audio-player/lib/styles.css";
-import "../../audio-player-customization.css";
 
 const audioType = "audio/*";
 

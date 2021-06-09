@@ -1,7 +1,5 @@
 import React from "react";
 import styles from "../../recorder.module.css";
-import "react-h5-audio-player/lib/styles.css";
-import "../../audio-player-customization.css";
 
 const NewAudioRecorder = ({
 	recorderState,
