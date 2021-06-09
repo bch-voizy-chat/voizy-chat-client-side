@@ -81,6 +81,8 @@ const NewAudio = (props) => {
 			})
 			.catch((error) => {
 				console.error("Error:", error);
+				setIsLoading(false);
+				alert("Oops! Something went wrong. Please try again.");
 			});
 	}
 

@@ -125,7 +125,11 @@ const NewAudioPlayback = ({
 					value='someHiddenValue'
 				></input>
 
-				<Button onClick={handleSubmit} className='squishy w-100 mt-3'>
+				<Button
+					onClick={handleSubmit}
+					className='squishy w-100 mt-3'
+					disabled={isLoading}
+				>
 					{isLoading ? "Loading…" : "Upload"}
 				</Button>
 				<Button

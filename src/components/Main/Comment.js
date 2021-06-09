@@ -21,8 +21,6 @@ const Comment = ({ response }) => {
 
 	const storedLike = localStorage.getItem(`${response.responseId} liked`);
 
-	console.log(response.responseLikes);
-
 	const [like, setLike] = useState(storedLike);
 	const [likeCount, setLikeCount] = useState(response.responseLikes);
 	const likeHandler = () => {

@@ -88,7 +88,6 @@ const Thread = ({ thread }) => {
 		} else {
 			try {
 				await navigator.share(shareData);
-				console.log("shared!");
 			} catch (err) {
 				console.log(err);
 			}
