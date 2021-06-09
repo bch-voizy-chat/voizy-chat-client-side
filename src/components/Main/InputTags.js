@@ -2,30 +2,6 @@ import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 
 const InputTags = ({ tags, setTags }) => {
-	const [error, setError] = useState("");
-
-	const removeTag = (i) => {
-		console.log(i);
-		const newTags = [...tags];
-		newTags.splice(i, 1);
-		setTags(newTags);
-	};
-
-	const keyDownHandler = (e) => {
-		setError("");
-		const val = e.target.value;
-		if (e.keyCode == 13) {
-			// Check if tag already exists
-			if (tags.find((tag) => tag.toLowerCase() === val.toLowerCase())) {
-				setError("Tag exists already");
-				return;
-			}
-			// Add tag if value is not empty
-			val && setTags([...tags, val]);
-			e.target.value = null;
-		}
-	};
-
 	let tagList = tags.map((tag, index) => {
 		return (
 			<li key={index} className='d-flex align-items-center input-tag__tag'>

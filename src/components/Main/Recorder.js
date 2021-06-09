@@ -51,6 +51,8 @@ class Recorder extends Component {
 		this.handleAudioStart = this.handleAudioStart.bind(this);
 		this.handleAudioUpload = this.handleAudioUpload.bind(this);
 		this.handleReset = this.handleReset.bind(this);
+		this.setAudioTags = this.setAudioTags.bind(this);
+		this.setAudioTitle = this.setAudioTitle.bind(this);
 	}
 
 	handleAudioPause() {
@@ -92,8 +94,6 @@ class Recorder extends Component {
 		};
 		return obj;
 	}
-
-	async componentDidMount() {}
 
 	checkMicPermissionBeforeStart() {
 		navigator.getUserMedia =
@@ -180,17 +180,12 @@ class Recorder extends Component {
 		});
 	}
 
-	saveAudioDetails(audioTitle, audioTags) {
-		let a_title = "";
-		let a_tags = [];
-
-		this.setState(
-			{
-				audio_title: { a_title },
-				audio_tags: { a_tags },
-			},
-			() => {}
-		);
+	setAudioTags(tags) {
+		this.props.setAudioTags(tags);
+		console.log(tags);
+	}
+	setAudioTitle(title) {
+		this.props.setAudioTitle(title);
 	}
 
 	handleReset(e) {
@@ -238,6 +233,8 @@ class Recorder extends Component {
 							audios={this.state.audios}
 							handleReset={this.handleReset}
 							handleAudioUpload={this.handleAudioUpload}
+							setAudioTags={this.props.setAudioTags}
+							setAudioTitle={this.props.setAudioTitle}
 						/>
 					)}
 				</div>

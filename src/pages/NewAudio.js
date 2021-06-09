@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import axios from "axios";
-import demoAudio from "../audio/Yksi_pieni_elefanti_intro.mp3";
-import demoPNG from "../android-chrome-192x192.png";
 
 import Recorder from "../components/Main/Recorder";
 
@@ -65,6 +62,8 @@ import Recorder from "../components/Main/Recorder";
 
 const NewAudio = (props) => {
 	const { currentUser } = useAuth();
+	const [audioTags, setAudioTags] = useState([]);
+	const [audioTitle, setAudioTitle] = useState("");
 
 	const isComment = props.location.state.status;
 	let threadId;
@@ -88,14 +87,9 @@ const NewAudio = (props) => {
 		setAudioDetails(data);
 	}
 
-	const [selectedFile, setSelectedFile] = useState(null);
-	const handleFileInput = (e) => {
-		setSelectedFile(e.target.files[0]);
-	};
-
-	const handleSubmission = () => {};
-
 	function handleAudioUpload() {
+		console.log(audioTitle);
+		console.log(audioTags);
 		// POST endpoint
 		const targetUrl =
 			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread";
@@ -110,8 +104,6 @@ const NewAudio = (props) => {
 		// // Other FormData object for tetsting
 		// // let newAudioData2 = new FormData();
 
-		// // Form data formatting and other details to post the form.
-		let audioTitle = document.getElementById("audioTitle").value;
 		// let tags = document.getElementById("audioTags").value;
 		// let audioTags = tags.split(", ");
 		let userid = currentUser.userId;
@@ -127,16 +119,13 @@ const NewAudio = (props) => {
 		formData.append("file", audioDetails.blob, audioFileName + ".ogg");
 		formData.append("userid", userid);
 		formData.append("password", password);
-		formData.append("threadtags", '["test","test from browser"]');
+		formData.append("threadtags", JSON.stringify(audioTags));
 		formData.append("threadTitle", audioTitle);
 
-		fetch(
-			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread",
-			{
-				method: "POST",
-				body: formData,
-			}
-		)
+		fetch(targetUrl, {
+			method: "POST",
+			body: formData,
+		})
 			.then((response) => response.json())
 			.then((result) => {
 				console.log("Success:", result);
@@ -189,6 +178,8 @@ const NewAudio = (props) => {
 				handleAudioStop={handleAudioStop}
 				handleAudioUpload={handleAudioUpload}
 				handleReset={handleReset}
+				setAudioTags={setAudioTags}
+				setAudioTitle={setAudioTitle}
 			/>
 		</div>
 	);

@@ -1,19 +1,75 @@
 import React, { useState } from "react";
 
+import { Form, Button } from "react-bootstrap";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
-import styles from "../../recorder.module.css";
-import { Form, Button } from "react-bootstrap";
 // remember to keep the custom.css file at the bottom for overriding the styles accordingly.
 import "../../audio-player-customization.css";
 
-import InputTags from "./InputTags";
-
-const NewAudioPlayback = ({ audios, handleReset, handleAudioUpload }) => {
+const NewAudioPlayback = ({
+	audios,
+	handleReset,
+	handleAudioUpload,
+	setAudioTitle,
+	setAudioTags,
+}) => {
 	const [tags, setTags] = useState([]);
+	const [error, setError] = useState("");
+
+	const removeTag = (i) => {
+		console.log(i);
+		const newTags = [...tags];
+		newTags.splice(i, 1);
+		setTags(newTags);
+		setAudioTags(newTags);
+	};
+
+	const keyDownHandler = (e) => {
+		setError("");
+		const val = e.target.value;
+		if (e.keyCode == 13) {
+			// Check if tag already exists
+			if (tags.find((tag) => tag.toLowerCase() === val.toLowerCase())) {
+				setError("Tag exists already");
+				return;
+			}
+			// Add tag if value is not empty
+			if (val) {
+				setTags([...tags, val]);
+				setAudioTags([...tags, val]);
+			}
+			e.target.value = null;
+		}
+	};
+
+	let tagList = tags.map((tag, index) => {
+		return (
+			<li key={index} className='d-flex align-items-center input-tag__tag'>
+				{tag}
+				<button
+					type='button'
+					onClick={() => removeTag(index)}
+					className='input-tag__remove-btn'
+				>
+					<span className='visually-hidden'>Remove tag</span>
+					<span aria-hidden className='input-tag__remove-btn__text'>
+						+
+					</span>
+				</button>
+			</li>
+		);
+	});
+
+	const handleTitleInput = (e) => {
+		setAudioTitle(e.target.value);
+	};
+
+	const handleSubmit = () => {
+		handleAudioUpload();
+	};
 
 	return (
-		<div className={styles.audio_section}>
+		<div>
 			<h3>Audio preview</h3>
 			<AudioPlayer
 				style={{ width: "300px" }}
@@ -31,11 +87,33 @@ const NewAudioPlayback = ({ audios, handleReset, handleAudioUpload }) => {
 			<Form id='newAudioForm'>
 				<Form.Group className='mb-3' controlId='audioTitle'>
 					<Form.Label>Audio title</Form.Label>
-					<Form.Control type='text' placeholder='My Audio Title' />
+					<Form.Control
+						type='text'
+						placeholder='My Audio Title'
+						onChange={handleTitleInput}
+					/>
 					<Form.Text className='text-muted'>Max. 140 characters.</Form.Text>
 				</Form.Group>
 
-				<InputTags tags={tags} setTags={setTags} />
+				<Form.Group controlId='audioTags'>
+					<Form.Label>Enter tags</Form.Label>
+
+					<Form.Control
+						type='text'
+						onKeyDown={keyDownHandler}
+						className='input-tag__tags__input'
+					/>
+					<Form.Text className='text-muted'>
+						{error ? (
+							<span className='text-danger'>{error}</span>
+						) : (
+							"Press ENTER to add tag"
+						)}
+					</Form.Text>
+					<ul className='d-flex align-items-center flex-wrap input-tag__tags'>
+						{tagList}
+					</ul>
+				</Form.Group>
 
 				<input
 					type='hidden'
@@ -45,17 +123,14 @@ const NewAudioPlayback = ({ audios, handleReset, handleAudioUpload }) => {
 				></input>
 
 				<Button
-					onClick={handleAudioUpload}
-					className={`${styles.btn} ${styles.upload_btn}`}
+					onClick={handleSubmit}
+					className={``}
 					// disabled={this.props.uploadButtonDisabled}
 				>
 					Upload
 				</Button>
 
-				<Button
-					onClick={handleReset}
-					className={`${styles.btn} ${styles.clear_btn}`}
-				>
+				<Button onClick={handleReset} className={``}>
 					Clear
 				</Button>
 			</Form>
