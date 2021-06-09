@@ -16,8 +16,6 @@ import React from "react";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 
-import demoAudio from "../../audio/Yksi_pieni_elefanti_intro.mp3";
-
 const PlayerComponent = ({ audioPath }) => {
 	return (
 		<div className='player-component-container'>
