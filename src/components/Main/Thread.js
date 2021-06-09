@@ -3,10 +3,11 @@ import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 
 import PlayerComponent from "./PlayerComponent";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 
 const Thread = ({ thread }) => {
-	const { currentUser } = useAuth();
+	const { currentUser, isLoggedIn } = useAuth();
+	const history = useHistory();
 	const location = useLocation();
 
 	const storedLike = localStorage.getItem(`${thread.threadId} liked`);
@@ -21,7 +22,12 @@ const Thread = ({ thread }) => {
 	}, [thread.threadLikes]);
 
 	const likeHandler = () => {
-		if (like) {
+		if (!isLoggedIn) {
+			history.push({
+				pathname: "/login",
+				state: { message: "user not logged in", status: 400 },
+			});
+		} else if (like) {
 			setLike(false);
 			setLikeCount(likeCount - 1);
 			/** Post update: likeCount + if user liked the post. */
@@ -74,11 +80,18 @@ const Thread = ({ thread }) => {
 		url: `/conversation/${thread}`,
 	};
 	const shareHandler = async () => {
-		try {
-			await navigator.share(shareData);
-			console.log("shared!");
-		} catch (err) {
-			console.log(err);
+		if (!isLoggedIn) {
+			history.push({
+				pathname: "/login",
+				state: { message: "user not logged in", status: 400 },
+			});
+		} else {
+			try {
+				await navigator.share(shareData);
+				console.log("shared!");
+			} catch (err) {
+				console.log(err);
+			}
 		}
 	};
 

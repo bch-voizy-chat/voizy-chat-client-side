@@ -85,6 +85,7 @@ export function AuthProvider({ children }) {
 				let user = {
 					userId: res.data.userId,
 					password: res.data.password,
+					email: email,
 				};
 				setUserCookie(user);
 				setCurrentUser(user);

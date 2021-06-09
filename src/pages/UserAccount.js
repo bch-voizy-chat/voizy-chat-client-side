@@ -1,6 +1,10 @@
 import React from "react";
 import { Button } from "react-bootstrap";
+
+import { useAuth } from "../contexts/AuthContext";
+
 const UserAccount = () => {
+	const { currentUser } = useAuth();
 	return (
 		<div
 			className='flow d-flex flex-column mx-auto pt-5 text-center'
@@ -9,13 +13,10 @@ const UserAccount = () => {
 			<section className='details flow'>
 				<h2>Account Details:</h2>
 				<div className='detail__container'>
-					<p>Email</p>
+					<p>{currentUser.email}</p>
 				</div>
 				<div className='detail__container'>
 					<p>Password</p>
-				</div>
-				<div className='detail__container'>
-					<p>Username</p>
 				</div>
 				<Button disabled className='squishy w-100'>
 					Edit Account

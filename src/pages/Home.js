@@ -53,11 +53,6 @@ const Home = () => {
 					<line x1='5' y1='30' x2='55' y2='30' />
 				</svg>
 			</Link>
-
-			<p>
-				All threads; {userLoggedIn ? "User is logged in" : "No users logged in"}
-			</p>
-
 			<section>{threadList}</section>
 		</div>
 	);
