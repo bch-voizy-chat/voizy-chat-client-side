@@ -8,6 +8,7 @@ const SingleThread = () => {
 	/** [1,2,3] and threadId for dev purpose */
 	const [comments, setComments] = useState([1, 2, 3]);
 	let threadId = 1;
+	let threadPosterUserName = "bob";
 
 	const commentList = comments.map((comment) => {
 		return (
@@ -23,10 +24,11 @@ const SingleThread = () => {
 			<Link
 				to={{
 					pathname: "/new",
-					state: { 
-						message: "new comment", 
-						status: 1, 
-						threadId: threadId 
+					state: {
+						message: "new comment",
+						status: 1,
+						threadId: threadId,
+						threadPosterUserName: threadPosterUserName,
 					},
 				}}
 				className='squishy new-audio-link'

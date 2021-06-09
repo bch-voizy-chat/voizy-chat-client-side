@@ -9,10 +9,11 @@ const NewAudio = (props) => {
 	const [audioTitle, setAudioTitle] = useState("");
 
 	const isComment = props.location.state.status;
-	let threadId;
+	let threadId, threadPosterUserName;
 	if (isComment) {
 		/** If the new audio is a comment, a threadId is associated to it */
 		threadId = props.location.state.threadId;
+		threadPosterUserName = props.location.state.threadPosterUserName;
 	}
 	const [audioDetails, setAudioDetails] = useState({
 		url: null,
@@ -30,12 +31,10 @@ const NewAudio = (props) => {
 	}
 
 	function handleAudioUpload() {
-		// POST endpoint
-		const targetUrl =
-			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread";
-
 		// (httpbin) PUBLIC SERVICE FOR TESTING REST APIs
 		const testtUrl = "https://httpbin.org/post";
+		// POST endpoint
+		let targetUrl;
 
 		const audioFileName =
 			audioTitle.replace(/\s+/g, "-") +
@@ -46,12 +45,27 @@ const NewAudio = (props) => {
 
 		// Creation of the FormData object
 		const formData = new FormData();
-		// Addition of data to the FormData object
-		formData.append("file", audioDetails.blob, audioFileName + ".ogg");
-		formData.append("userid", currentUser.userId);
-		formData.append("password", currentUser.password);
-		formData.append("threadtags", JSON.stringify(audioTags));
-		formData.append("threadTitle", audioTitle);
+
+		if (isComment) {
+			targetUrl =
+				"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addresponse";
+
+			// Addition of data to the FormData object
+			formData.append("file", audioDetails.blob, audioFileName + ".ogg");
+			formData.append("userid", currentUser.userId);
+			formData.append("password", currentUser.password);
+			formData.append("threadId", threadId);
+		} else {
+			targetUrl =
+				"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread";
+
+			// Addition of data to the FormData object
+			formData.append("file", audioDetails.blob, audioFileName + ".ogg");
+			formData.append("userid", currentUser.userId);
+			formData.append("password", currentUser.password);
+			formData.append("threadtags", JSON.stringify(audioTags));
+			formData.append("threadTitle", audioTitle);
+		}
 
 		fetch(targetUrl, {
 			method: "POST",
@@ -82,7 +96,9 @@ const NewAudio = (props) => {
 
 	return (
 		<div>
-			{isComment ? "Comment for thread " + threadId : "New thread"}
+			{isComment
+				? "Comment for thread " + threadId + " by " + threadPosterUserName
+				: "New thread"}
 			<Recorder
 				audioDetails={audioDetails}
 				setAudioDetails={setAudioDetails}
@@ -91,6 +107,8 @@ const NewAudio = (props) => {
 				handleReset={handleReset}
 				setAudioTags={setAudioTags}
 				setAudioTitle={setAudioTitle}
+				isComment={isComment}
+				threadPosterUserName={threadPosterUserName}
 			/>
 		</div>
 	);

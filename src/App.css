@@ -50,6 +50,12 @@ ul {
 	box-shadow: var(--box-shadow-outline);
 }
 
+/* .btn-outline-secondary {
+	color: var(--color-orange);
+	border-color: var(--color-orange);
+	text-align: right;
+} */
+
 /* Nav */
 
 .voizy-nav-link {

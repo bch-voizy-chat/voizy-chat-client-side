@@ -47,8 +47,6 @@ class Recorder extends Component {
 		this.handleAudioStart = this.handleAudioStart.bind(this);
 		this.handleAudioUpload = this.handleAudioUpload.bind(this);
 		this.handleReset = this.handleReset.bind(this);
-		this.setAudioTags = this.setAudioTags.bind(this);
-		this.setAudioTitle = this.setAudioTitle.bind(this);
 	}
 
 	handleAudioPause() {
@@ -169,13 +167,6 @@ class Recorder extends Component {
 		});
 	}
 
-	setAudioTags(tags) {
-		this.props.setAudioTags(tags);
-	}
-	setAudioTitle(title) {
-		this.props.setAudioTitle(title);
-	}
-
 	handleReset(e) {
 		if (this.state.recording) {
 			this.stopRecording(e);
@@ -223,6 +214,7 @@ class Recorder extends Component {
 							handleAudioUpload={this.handleAudioUpload}
 							setAudioTags={this.props.setAudioTags}
 							setAudioTitle={this.props.setAudioTitle}
+							isComment={this.props.isComment}
 						/>
 					)}
 				</div>
