@@ -12,9 +12,24 @@ const Signup = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [accountError, setAccountError] = useState("");
 
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+
+	const handlePasswordChange = (e) => {
+		setPassword(e.target.value);
+	};
+	const handleConfirmPasswordChange = (e) => {
+		setConfirmPassword(e.target.value);
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setIsLoading(true);
+		if (password !== confirmPassword) {
+			alert("We need the passwords to match to create your account.");
+			setIsLoading(false);
+			return;
+		}
 		let resp = await signup(
 			emailRef.current.value,
 			passwordRef.current.value,
@@ -42,7 +57,25 @@ const Signup = () => {
 				</Form.Group>
 				<Form.Group id='password'>
 					<Form.Label>Password</Form.Label>
-					<Form.Control type='password' ref={passwordRef} required />
+					<Form.Control
+						type='password'
+						ref={passwordRef}
+						required
+						onChange={handlePasswordChange}
+					/>
+				</Form.Group>
+				<Form.Group id='confirmPassword'>
+					<Form.Label>Confirm Password</Form.Label>
+					<Form.Control
+						type='password'
+						required
+						onChange={handleConfirmPasswordChange}
+					/>
+					{password !== confirmPassword && (
+						<Form.Text className='text-danger'>
+							Passwords need to match
+						</Form.Text>
+					)}
 				</Form.Group>
 				<Form.Group id='username'>
 					<Form.Label>Username</Form.Label>
@@ -58,7 +91,7 @@ const Signup = () => {
 			</Form>
 			{accountError && (
 				<Alert variant='danger' className='mb-0'>
-					Oops! {accountError}
+					Oops! {accountError.charAt(0).toUpperCase() + accountError.slice(1)}
 				</Alert>
 			)}
 			<p className='w-100 text-center'>
