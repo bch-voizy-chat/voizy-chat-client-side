@@ -15,7 +15,7 @@ const Comment = ({ response }) => {
 		let mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
 		let da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
 		let hr = d.getHours();
-		let min = d.getMinutes();
+		let min = d.getMinutes().toString().padStart(2, "0");
 		return `${da}/${mo}/${ye}, ${hr}:${min}`;
 	};
 
