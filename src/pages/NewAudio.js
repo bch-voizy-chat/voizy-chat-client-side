@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 import Recorder from "../components/Main/Recorder";
+import { useHistory } from "react-router";
 
 const NewAudio = (props) => {
 	const { currentUser } = useAuth();
+	const history = useHistory();
 	const [audioTags, setAudioTags] = useState([]);
 	const [audioTitle, setAudioTitle] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 
 	const isComment = props.location.state.status;
 	let threadId, threadPosterUserName;
@@ -31,8 +34,7 @@ const NewAudio = (props) => {
 	}
 
 	function handleAudioUpload() {
-		// (httpbin) PUBLIC SERVICE FOR TESTING REST APIs
-		const testtUrl = "https://httpbin.org/post";
+		setIsLoading(true);
 		// POST endpoint
 		let targetUrl;
 
@@ -74,6 +76,8 @@ const NewAudio = (props) => {
 			.then((response) => response.json())
 			.then((result) => {
 				console.log("Success:", result);
+				setIsLoading(false);
+				history.push("/");
 			})
 			.catch((error) => {
 				console.error("Error:", error);
@@ -96,9 +100,11 @@ const NewAudio = (props) => {
 
 	return (
 		<div>
-			{isComment
-				? "Comment for thread " + threadId + " by " + threadPosterUserName
-				: "New thread"}
+			<h2 className='mt-5 w-100 mx-auto text-center'>
+				{isComment
+					? "Reply to " + threadPosterUserName
+					: "Start a conversation"}
+			</h2>
 			<Recorder
 				audioDetails={audioDetails}
 				setAudioDetails={setAudioDetails}
@@ -108,6 +114,7 @@ const NewAudio = (props) => {
 				setAudioTags={setAudioTags}
 				setAudioTitle={setAudioTitle}
 				isComment={isComment}
+				isLoading={isLoading}
 				threadPosterUserName={threadPosterUserName}
 			/>
 		</div>

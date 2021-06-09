@@ -214,6 +214,7 @@ class Recorder extends Component {
 							setAudioTags={this.props.setAudioTags}
 							setAudioTitle={this.props.setAudioTitle}
 							isComment={this.props.isComment}
+							isLoading={this.props.isLoading}
 						/>
 					)}
 				</div>

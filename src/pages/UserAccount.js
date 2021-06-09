@@ -16,7 +16,7 @@ const UserAccount = () => {
 					<p>{currentUser.email}</p>
 				</div>
 				<div className='detail__container'>
-					<p>Password</p>
+					<p>Super Secret Password</p>
 				</div>
 				<Button disabled className='squishy w-100'>
 					Edit Account
