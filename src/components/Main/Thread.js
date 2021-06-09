@@ -1,14 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
 
 import PlayerComponent from "./PlayerComponent";
 import { Link, useLocation } from "react-router-dom";
 
 const Thread = ({ thread }) => {
+	const { currentUser } = useAuth();
 	const location = useLocation();
-	const [like, setLike] = useState(false);
+
+	const storedLike = localStorage.getItem(`${thread.threadId} liked`);
+	const [like, setLike] = useState(storedLike);
+
+	const [likeCount, setLikeCount] = useState(thread.threadLikes);
+
+	useEffect(() => {
+		if (location.pathname !== "/") {
+			setLikeCount(likeCount + thread.threadLikes);
+		}
+	}, [thread.threadLikes]);
+
 	const likeHandler = () => {
-		console.log("like!");
-		like ? setLike(false) : setLike(true);
+		if (like) {
+			setLike(false);
+			setLikeCount(likeCount - 1);
+			/** Post update: likeCount + if user liked the post. */
+		} else {
+			setLike(true);
+			setLikeCount(likeCount + 1);
+			/** Post update */
+			if (!storedLike) {
+				const threadLikeUrl =
+					"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/likeThread";
+				const data = {
+					userid: currentUser.userId,
+					password: currentUser.password,
+					threadId: thread.threadId,
+				};
+				axios
+					.post(threadLikeUrl, data)
+					.then((res) => console.log(res))
+					.catch((err) => console.log(err));
+				localStorage.setItem(`${thread.threadId} liked`, true);
+			}
+		}
 	};
 
 	let likeBtnClass = `d-flex align-items-center btn-text squishy thread__icon thread__icon--like ${
@@ -33,7 +68,20 @@ const Thread = ({ thread }) => {
 		return `${da}/${mo}/${ye}, ${hr}:${min}`;
 	};
 
-	const shareHandler = () => console.log("share!");
+	const shareData = {
+		title: "Thread title",
+		text: "Listen to what [username] has to say",
+		url: `/conversation/${thread}`,
+	};
+	const shareHandler = async () => {
+		try {
+			await navigator.share(shareData);
+			console.log("shared!");
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
 	return (
 		<article className='thread audio-container'>
 			<p className='mb-0'>
@@ -66,13 +114,13 @@ const Thread = ({ thread }) => {
 					<span className='visually-hidden'>comments. Comment</span>
 				</Link>
 				<button
-					className='btn-text squishy thread__icon thread__icon--share'
+					className='btn-text squishy mobile-only thread__icon thread__icon--share'
 					onClick={shareHandler}
 				>
 					<span className='visually-hidden'>Share</span>
 				</button>
 				<button className={likeBtnClass} onClick={likeHandler}>
-					{thread.threadLikes}
+					{likeCount}
 					<span className='visually-hidden'>likes. Like</span>
 				</button>
 			</div>

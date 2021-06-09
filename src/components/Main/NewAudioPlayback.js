@@ -24,7 +24,7 @@ const NewAudioPlayback = ({
 	const keyDownHandler = (e) => {
 		setError("");
 		const val = e.target.value;
-		if (e.keyCode == 13) {
+		if (e.keyCode === 13) {
 			// Check if tag already exists
 			if (tags.find((tag) => tag.toLowerCase() === val.toLowerCase())) {
 				setError("Tag exists already");
