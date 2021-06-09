@@ -75,9 +75,9 @@ const Thread = ({ thread }) => {
 	};
 
 	const shareData = {
-		title: "Thread title",
-		text: "Listen to what [username] has to say",
-		url: `/conversation/${thread}`,
+		title: thread.threadTitle,
+		text: `Listen to what ${thread.threadPosterUserName} has to say`,
+		url: `/conversation/${thread.threadId}`,
 	};
 	const shareHandler = async () => {
 		if (!isLoggedIn) {
