@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 import Thread from "../components/Main/Thread";
 
 const Home = () => {
-	const { currentUser } = useAuth();
-	const userLoggedIn = Object.keys(currentUser).length;
-
 	const [threads, setThreads] = useState([]);
 	const fetchData = async () => {
 		try {

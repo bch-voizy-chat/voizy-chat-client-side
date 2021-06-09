@@ -16,10 +16,10 @@ const Thread = ({ thread }) => {
 	const [likeCount, setLikeCount] = useState(thread.threadLikes);
 
 	useEffect(() => {
-		if (location.pathname !== "/") {
+		if (location.pathname !== "/" && !likeCount) {
 			setLikeCount(likeCount + thread.threadLikes);
 		}
-	}, [thread.threadLikes]);
+	}, [location.pathname, likeCount, thread.threadLikes]);
 
 	const likeHandler = () => {
 		if (!isLoggedIn) {
