@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 
-const InputTags = () => {
-	const [tags, setTags] = useState([]);
+const InputTags = ({ tags, setTags }) => {
 	const [error, setError] = useState("");
 
 	const removeTag = (i) => {

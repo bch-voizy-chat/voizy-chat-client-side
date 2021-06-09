@@ -1,8 +1,67 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
+import demoAudio from "../audio/Yksi_pieni_elefanti_intro.mp3";
+import demoPNG from "../android-chrome-192x192.png";
 
 import Recorder from "../components/Main/Recorder";
+
+// function NewAudio() {
+// 	const [selectedFile, setSelectedFile] = useState();
+// 	const [isSelected, setIsSelected] = useState(false);
+
+// 	const changeHandler = (event) => {
+// 		setSelectedFile(event.target.files[0]);
+// 		setIsSelected(true);
+// 	};
+
+// 	const handleSubmission = () => {
+// 		const formData = new FormData();
+
+// 		formData.append("file", selectedFile);
+// 		formData.append("userid", "fEwPXPFf4wGnS7WHg7m7");
+// 		formData.append("password", "abcd");
+// 		formData.append("threadtags", '["test","test from browser"]');
+// 		formData.append("threadTitle", "browser test");
+
+// 		fetch(
+// 			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread",
+// 			{
+// 				method: "POST",
+// 				body: formData,
+// 			}
+// 		)
+// 			.then((response) => response.json())
+// 			.then((result) => {
+// 				console.log("Success:", result);
+// 			})
+// 			.catch((error) => {
+// 				console.error("Error:", error);
+// 			});
+// 	};
+
+// 	return (
+// 		<div>
+// 			<input type='file' name='file' onChange={changeHandler} />
+// 			{isSelected ? (
+// 				<div>
+// 					<p>Filename: {selectedFile.name}</p>
+// 					<p>Filetype: {selectedFile.type}</p>
+// 					<p>Size in bytes: {selectedFile.size}</p>
+// 					<p>
+// 						lastModifiedDate:{" "}
+// 						{selectedFile.lastModifiedDate.toLocaleDateString()}
+// 					</p>
+// 				</div>
+// 			) : (
+// 				<p>Select a file to show details</p>
+// 			)}
+// 			<div>
+// 				<button onClick={handleSubmission}>Submit</button>
+// 			</div>
+// 		</div>
+// 	);
+// }
 
 const NewAudio = (props) => {
 	const { currentUser } = useAuth();
@@ -29,11 +88,14 @@ const NewAudio = (props) => {
 		setAudioDetails(data);
 	}
 
-	function handleAudioUpload() {
-		// console.log(currentUser);
-		// console.log(audioDetails.blob);
-		// console.log("handleAudioUpload clicked");
+	const [selectedFile, setSelectedFile] = useState(null);
+	const handleFileInput = (e) => {
+		setSelectedFile(e.target.files[0]);
+	};
 
+	const handleSubmission = () => {};
+
+	function handleAudioUpload() {
 		// POST endpoint
 		const targetUrl =
 			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread";
@@ -43,51 +105,65 @@ const NewAudio = (props) => {
 		const testtUrl = "https://httpbin.org/post";
 
 		// Creation of the FormData object
-		let newAudioData = new FormData();
+		// let newAudioData = new FormData();
 
-		// Other FormData object for tetsting
-		// let newAudioData2 = new FormData();
+		// // Other FormData object for tetsting
+		// // let newAudioData2 = new FormData();
 
-		// Form data formatting and other details to post the form.
+		// // Form data formatting and other details to post the form.
 		let audioTitle = document.getElementById("audioTitle").value;
-		let tags = document.getElementById("audioTags").value;
-		let audioTags = tags.split(", ");
+		// let tags = document.getElementById("audioTags").value;
+		// let audioTags = tags.split(", ");
 		let userid = currentUser.userId;
 		let password = currentUser.password;
 		let audioFileName =
 			audioTitle.replace(/\s+/g, "-") + "_" + userid + "_" + Date.now();
 
 		// Addition of data to the FormData object
-		newAudioData.append("audioTitle", audioTitle);
-		newAudioData.append("audioTags", '["test","sound test2"]');
-		newAudioData.append("userid", userid);
-		newAudioData.append("password", password);
-		newAudioData.append("file", audioDetails.blob, audioFileName + ".ogg");
+		// newAudioData.append("audioTitle", audioTitle);
 
-		// console.log(newAudioForm);
+		const formData = new FormData();
 
-		// console.log(audioTitle);
-		// console.log(audioTags);
-		// console.log(audioFileName);
-		// console.log(newAudioData);
+		formData.append("file", audioDetails.blob, audioFileName + ".ogg");
+		formData.append("userid", userid);
+		formData.append("password", password);
+		formData.append("threadtags", '["test","test from browser"]');
+		formData.append("threadTitle", audioTitle);
 
-		// TESTS with newAudioData2
-		// newAudioData2.append("audioTitle", audioTitle);
-		// newAudioData.append("audioTags", audioTags);
-		// console.log(newAudioData2);
+		fetch(
+			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread",
+			{
+				method: "POST",
+				body: formData,
+			}
+		)
+			.then((response) => response.json())
+			.then((result) => {
+				console.log("Success:", result);
+			})
+			.catch((error) => {
+				console.error("Error:", error);
+			});
+
+		// // newAudioData.set("audioTags", '["test","sound test2"]');
+		// newAudioData.append("userid", userid);
+		// newAudioData.append("password", password);
+		// newAudioData.append("threadTitle", audioTitle);
+		// // newAudioData.append("fields", fields);
+		// newAudioData.append("file", selectedFile);
 
 		// POST REQUEST
-		fetch(targetUrl, {
-			method: "POST",
-			body: newAudioData,
-			// mode: "no-cors",
-		})
-			.then((response) => {
-				console.log(response);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		// fetch(targetUrl, {
+		// 	method: "POST",
+		// 	body: newAudioData,
+		// })
+		// 	.then((response) => {
+		// 		return response.json();
+		// 	})
+		// 	.then((data) => console.log(data))
+		// 	.catch((err) => {
+		// 		console.log(err);
+		// 	});
 	}
 
 	function handleReset() {
