@@ -14,7 +14,6 @@ const NewAudioPlayback = ({
 	const [error, setError] = useState("");
 
 	const removeTag = (i) => {
-		console.log(i);
 		const newTags = [...tags];
 		newTags.splice(i, 1);
 		setTags(newTags);

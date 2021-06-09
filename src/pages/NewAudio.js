@@ -26,42 +26,30 @@ const NewAudio = (props) => {
 	});
 
 	function handleAudioStop(data) {
-		console.log(data);
 		setAudioDetails(data);
 	}
 
 	function handleAudioUpload() {
-		console.log(audioTitle);
-		console.log(audioTags);
 		// POST endpoint
 		const targetUrl =
 			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread";
 
-		// "https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread"
 		// (httpbin) PUBLIC SERVICE FOR TESTING REST APIs
 		const testtUrl = "https://httpbin.org/post";
 
+		const audioFileName =
+			audioTitle.replace(/\s+/g, "-") +
+			"_" +
+			currentUser.userId +
+			"_" +
+			Date.now();
+
 		// Creation of the FormData object
-		// let newAudioData = new FormData();
-
-		// // Other FormData object for tetsting
-		// // let newAudioData2 = new FormData();
-
-		// let tags = document.getElementById("audioTags").value;
-		// let audioTags = tags.split(", ");
-		let userid = currentUser.userId;
-		let password = currentUser.password;
-		let audioFileName =
-			audioTitle.replace(/\s+/g, "-") + "_" + userid + "_" + Date.now();
-
-		// Addition of data to the FormData object
-		// newAudioData.append("audioTitle", audioTitle);
-
 		const formData = new FormData();
-
+		// Addition of data to the FormData object
 		formData.append("file", audioDetails.blob, audioFileName + ".ogg");
-		formData.append("userid", userid);
-		formData.append("password", password);
+		formData.append("userid", currentUser.userId);
+		formData.append("password", currentUser.password);
 		formData.append("threadtags", JSON.stringify(audioTags));
 		formData.append("threadTitle", audioTitle);
 
@@ -76,26 +64,6 @@ const NewAudio = (props) => {
 			.catch((error) => {
 				console.error("Error:", error);
 			});
-
-		// // newAudioData.set("audioTags", '["test","sound test2"]');
-		// newAudioData.append("userid", userid);
-		// newAudioData.append("password", password);
-		// newAudioData.append("threadTitle", audioTitle);
-		// // newAudioData.append("fields", fields);
-		// newAudioData.append("file", selectedFile);
-
-		// POST REQUEST
-		// fetch(targetUrl, {
-		// 	method: "POST",
-		// 	body: newAudioData,
-		// })
-		// 	.then((response) => {
-		// 		return response.json();
-		// 	})
-		// 	.then((data) => console.log(data))
-		// 	.catch((err) => {
-		// 		console.log(err);
-		// 	});
 	}
 
 	function handleReset() {

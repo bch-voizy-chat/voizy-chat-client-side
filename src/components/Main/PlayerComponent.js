@@ -21,9 +21,6 @@ import demoAudio from "../../audio/Yksi_pieni_elefanti_intro.mp3";
 const PlayerComponent = () => {
 	return (
 		<div className='player-component-container'>
-			{/* <div className="audio__title">
-			<h2>Audio Title</h2>
-		</div> */}
 			<AudioPlayer
 				src={demoAudio}
 				customAdditionalControls={[]}

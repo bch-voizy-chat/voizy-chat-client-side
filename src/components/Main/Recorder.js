@@ -32,8 +32,6 @@ class Recorder extends Component {
 			mic_access_granted: false,
 			medianotFound: false,
 			audios: [],
-			audio_title: "",
-			audio_tags: [],
 			audioBlob: null,
 			mimeTypeToUseWhenRecording: `audio/webm`,
 			recordedChunks: null,
@@ -65,9 +63,7 @@ class Recorder extends Component {
 	}
 
 	startTimer() {
-		//if (this.timer === 0 && this.state.seconds > 0) {
 		this.timer = setInterval(this.countDown, 1000);
-		//}
 	}
 
 	countDown() {
@@ -106,7 +102,6 @@ class Recorder extends Component {
 					this.setState({ localStream: stream });
 					if (typeof stream === "object") {
 						this.setState({ mic_access_granted: true });
-						console.log(`mic_access_granted is true`);
 					}
 					if (this.state.mimeTypeToUseWhenRecording) {
 						this.mediaRecorder = new MediaRecorder(stream, {
@@ -138,10 +133,6 @@ class Recorder extends Component {
 		} else {
 			this.setState({ medianotFound: true });
 			this.setState({ mic_access_granted: false });
-			console.log("mic denied");
-			/* 			console.log(
-				"Media Decives will work only with SSL and if the user grants access to the device microphone..."
-			); */
 		}
 	}
 
@@ -180,7 +171,6 @@ class Recorder extends Component {
 
 	setAudioTags(tags) {
 		this.props.setAudioTags(tags);
-		console.log(tags);
 	}
 	setAudioTitle(title) {
 		this.props.setAudioTitle(title);
