@@ -9,7 +9,16 @@ const SingleThread = () => {
 	const { threadId } = useParams();
 	console.log(threadId);
 
-	const [thread, setThread] = useState({});
+	const [thread, setThread] = useState({
+		threadAudioPath: "",
+		threadId: "",
+		threadLikes: 0,
+		threadPostDate: 0,
+		threadPosterUserName: "",
+		threadResponseCount: 0,
+		threadTags: [],
+		threadTitle: "",
+	});
 	const [comments, setComments] = useState([]);
 
 	const fetchData = async () => {
@@ -20,6 +29,7 @@ const SingleThread = () => {
 
 			setComments(res.data.responses);
 			setThread(res.data.thread);
+			console.log(res.data);
 		} catch (err) {
 			console.log(err);
 		}
@@ -37,7 +47,6 @@ const SingleThread = () => {
 
 	return (
 		<div className='content'>
-			<Thread thread={thread} />
 			<Link
 				to={{
 					pathname: "/new",
@@ -65,6 +74,7 @@ const SingleThread = () => {
 					<line x1='5' y1='30' x2='55' y2='30' />
 				</svg>
 			</Link>
+			<Thread thread={thread} />
 			<ol>{commentList}</ol>
 		</div>
 	);

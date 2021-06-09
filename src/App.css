@@ -137,6 +137,7 @@ ul {
 
 .thread__tags {
 	color: var(--color-orange);
+	font-weight: bold;
 }
 
 .thread__icon {
@@ -254,13 +255,12 @@ ul {
 	color: var(--color-orange);
 }
 
-.rhap_current-time,
-.rhap_total-time {
-	color: var(--color-orange);
+.rhap_current-left-time {
+	display: none;
 }
 
 .rhap_current-time {
-	display: none;
+	margin-left: 1rem;
 }
 
 .rhap_progress-filled,
@@ -271,6 +271,9 @@ ul {
 
 .rhap_controls-section {
 	flex: initial;
+}
+.rhap_progress-section {
+	flex-direction: row-reverse;
 }
 
 @media (min-width: 992px) {

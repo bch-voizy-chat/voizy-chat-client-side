@@ -23,6 +23,8 @@ const PlayerComponent = ({ audioPath }) => {
 		<div className='player-component-container'>
 			<AudioPlayer
 				src={audioPath}
+				autoPlayAfterSrcChange={false}
+				timeFormat={"mm:ss"}
 				customAdditionalControls={[]}
 				customVolumeControls={[]}
 				showJumpControls={false}

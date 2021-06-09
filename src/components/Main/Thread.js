@@ -36,8 +36,10 @@ const Thread = ({ thread }) => {
 	return (
 		<article className='thread audio-container'>
 			<p className='mb-0'>
-				<strong>{thread.threadPosterUserName}</strong> -{" "}
-				<span className='text-muted'>{formatDate(thread.threadPostDate)}</span>
+				<strong>{thread.threadPosterUserName}</strong>{" "}
+				<span className='text-muted'>
+					- {formatDate(thread.threadPostDate)}
+				</span>
 			</p>
 			<h3 className='thread__title'>{thread.threadTitle}</h3>
 			<p className='thread__tags'>{formatTags(thread.threadTags)}</p>
