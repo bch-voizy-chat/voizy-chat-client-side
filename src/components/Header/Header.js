@@ -1,16 +1,21 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
 
 import logo from "../../assets/Logo-white-png-tinified.png";
 
 const Header = () => {
+	const history = useHistory();
 	const [expanded, setExpanded] = useState(false);
 	const { logout, isLoggedIn } = useAuth();
 	const logoutHandler = () => {
 		logout();
-		window.location.reload();
+		setExpanded(false);
+		history.push({
+			pathname: "/login",
+			state: { message: "user logged out", status: 300 },
+		});
 	};
 
 	return (
