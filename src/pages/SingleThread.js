@@ -1,32 +1,59 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 
 import Thread from "../components/Main/Thread";
 import Comment from "../components/Main/Comment";
 
 const SingleThread = () => {
-	/** [1,2,3] and threadId for dev purpose */
-	const [comments, setComments] = useState([1, 2, 3]);
-	let threadId = 1;
+	const { threadId } = useParams();
+
+	const [thread, setThread] = useState({
+		threadAudioPath: "",
+		threadId: "",
+		threadLikes: 0,
+		threadPostDate: 0,
+		threadPosterUserName: "",
+		threadResponseCount: 0,
+		threadTags: [],
+		threadTitle: "",
+	});
+	const [comments, setComments] = useState([]);
+
+	const fetchData = async (threadId) => {
+		try {
+			let res = await axios.get(
+				`https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/threads/${threadId}`
+			);
+			setComments(res.data.responses);
+			setThread(res.data.thread);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	useEffect(() => {
+		fetchData(threadId);
+	}, [threadId]);
 
 	const commentList = comments.map((comment) => {
 		return (
-			<li key={comment}>
-				<Comment comment={comment} />
+			<li key={comment.responseId}>
+				<Comment response={comment} />
 			</li>
 		);
 	});
 
 	return (
 		<div className='content'>
-			<Thread />
 			<Link
 				to={{
 					pathname: "/new",
-					state: { 
-						message: "new comment", 
-						status: 1, 
-						threadId: threadId 
+					state: {
+						message: "new comment",
+						status: 1,
+						threadId: thread.threadId,
+						threadPosterUserName: thread.threadPosterUserName,
 					},
 				}}
 				className='squishy new-audio-link'
@@ -46,6 +73,7 @@ const SingleThread = () => {
 					<line x1='5' y1='30' x2='55' y2='30' />
 				</svg>
 			</Link>
+			<Thread thread={thread} />
 			<ol>{commentList}</ol>
 		</div>
 	);

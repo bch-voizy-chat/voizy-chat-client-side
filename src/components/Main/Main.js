@@ -20,7 +20,7 @@ const Main = () => {
 				<Route exact path='/signup' component={Signup} />
 				<PrivateRoute exact path='/new' component={NewAudio} />
 				<PrivateRoute exact path='/account' component={UserAccount} />
-				<Route exact path='/conversation/:id' component={SingleThread} />
+				<Route exact path='/conversation/:threadId' component={SingleThread} />
 				<Route path='/about' component={About} />
 				<Route path='*' component={PageNotFound} />
 			</Switch>
