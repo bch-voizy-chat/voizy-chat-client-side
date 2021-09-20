@@ -2,16 +2,21 @@ import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 import Recorder from "../components/Main/Recorder";
+import { useHistory } from "react-router";
 
 const NewAudio = (props) => {
-
 	const { currentUser } = useAuth();
+	const history = useHistory();
+	const [audioTags, setAudioTags] = useState([]);
+	const [audioTitle, setAudioTitle] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 
 	const isComment = props.location.state.status;
-	let threadId;
+	let threadId, threadPosterUserName;
 	if (isComment) {
 		/** If the new audio is a comment, a threadId is associated to it */
 		threadId = props.location.state.threadId;
+		threadPosterUserName = props.location.state.threadPosterUserName;
 	}
 	const [audioDetails, setAudioDetails] = useState({
 		url: null,
@@ -25,75 +30,60 @@ const NewAudio = (props) => {
 	});
 
 	function handleAudioStop(data) {
-		console.log(data);
 		setAudioDetails(data);
 	}
 
 	function handleAudioUpload() {
-		console.log(currentUser);
-		console.log(audioDetails.blob);
-		console.log("handleAudioUpload clicked");
-
+		setIsLoading(true);
 		// POST endpoint
-		// const targetUrl = "https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread";
-		
-		// (httpbin) PUBLIC SERVICE FOR TESTING REST APIs
-		const testtUrl = "https://httpbin.org/post";
+		let targetUrl;
 
-		// Collecting the form data in an object
-		let newAudioForm = document.getElementById("newAudioForm");
+		const audioFileName =
+			audioTitle.replace(/\s+/g, "-") +
+			"_" +
+			currentUser.userId +
+			"_" +
+			Date.now();
 
 		// Creation of the FormData object
-		let newAudioData = new FormData(newAudioForm);
+		const formData = new FormData();
 
-		// Other FormData object for tetsting
-		// let newAudioData2 = new FormData();
+		if (isComment) {
+			targetUrl =
+				"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addresponse";
 
-		// Form data formatting and other details to post the form.
-		let audioTitle = document.getElementById("audioTitle").value;
-		let tags = document.getElementById("audioTags").value;
-		let audioTags = tags.split(',');
-		let userid = "dhRgwhDp6B7uGE9aCvW5";
-		let email = "testUser@testemail.com";
-		let password = 123;
-		let audioFileName = audioTitle.replace(/\s+/g,'-')+"_"+userid+"_"+Date.now();
+			// Addition of data to the FormData object
+			formData.append("file", audioDetails.blob, audioFileName + ".ogg");
+			formData.append("userid", currentUser.userId);
+			formData.append("password", currentUser.password);
+			formData.append("threadId", threadId);
+		} else {
+			targetUrl =
+				"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread";
 
-		// Addition of data to the FormData object
-		newAudioData.append("audioTitle", audioTitle);
-		newAudioData.append("audioTags", audioTags);
-		// newAudioData.append("hidden", document.getElementById("hiddenvalue").value);
-		newAudioData.append("userid", userid);
-		newAudioData.append("password", password);
-		newAudioData.append("email", email);
-		newAudioData.append("newAudio", audioDetails.blob, audioFileName+".ogg");
+			// Addition of data to the FormData object
+			formData.append("file", audioDetails.blob, audioFileName + ".ogg");
+			formData.append("userid", currentUser.userId);
+			formData.append("password", currentUser.password);
+			formData.append("threadtags", JSON.stringify(audioTags));
+			formData.append("threadTitle", audioTitle);
+		}
 
-		// console.log(newAudioForm);
-
-		console.log(audioTitle);
-		console.log(audioTags);
-		console.log(audioFileName);
-		console.log(newAudioData);
-
-		// TESTS with newAudioData2
-		// newAudioData2.append("audioTitle", audioTitle);
-		// newAudioData.append("audioTags", audioTags);
-		// console.log(newAudioData2);
-
-
-		// POST REQUEST
-			fetch(testtUrl, {
+		fetch(targetUrl, {
 			method: "POST",
-			body: newAudioData
-		}).then(response => {
-			return response.json();
-		}).then(text => {
-			console.log(text);
-		}).catch(err => {
-			console.log(err);
-		}); 
-
-		
-
+			body: formData,
+		})
+			.then((response) => response.json())
+			.then((result) => {
+				console.log("Success:", result);
+				setIsLoading(false);
+				history.push("/");
+			})
+			.catch((error) => {
+				console.error("Error:", error);
+				setIsLoading(false);
+				alert("Oops! Something went wrong. Please try again.");
+			});
 	}
 
 	function handleReset() {
@@ -112,13 +102,22 @@ const NewAudio = (props) => {
 
 	return (
 		<div>
-			{isComment ? "Comment for thread " + threadId : "New thread"}
+			<h2 className='mt-5 w-100 mx-auto text-center'>
+				{isComment
+					? "Reply to " + threadPosterUserName
+					: "Start a conversation"}
+			</h2>
 			<Recorder
 				audioDetails={audioDetails}
 				setAudioDetails={setAudioDetails}
 				handleAudioStop={handleAudioStop}
 				handleAudioUpload={handleAudioUpload}
 				handleReset={handleReset}
+				setAudioTags={setAudioTags}
+				setAudioTitle={setAudioTitle}
+				isComment={isComment}
+				isLoading={isLoading}
+				threadPosterUserName={threadPosterUserName}
 			/>
 		</div>
 	);

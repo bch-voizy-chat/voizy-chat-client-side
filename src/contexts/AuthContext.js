@@ -9,8 +9,6 @@ const setUserCookie = (user) => {
 
 const getUserCookie = () => {
 	const userCookie = Cookies.get("user");
-	console.log("getting cookie");
-
 	if (userCookie === undefined) {
 		return {};
 	} else {
@@ -29,10 +27,10 @@ export function AuthProvider({ children }) {
 	/** for dev purpose, comment out useEffect and set default to 0 for not logged in, or 1 for logged in */
 	const [isLoggedIn, setIsLoggedIn] = useState(1);
 
-	// 	useEffect(
-	// 	() => setIsLoggedIn(Object.keys(currentUser).length),
-	// 	[currentUser]
-	// );
+	useEffect(
+		() => setIsLoggedIn(Object.keys(currentUser).length),
+		[currentUser]
+	);
 
 	const signup = (email, password, username) => {
 		const data = {
@@ -74,12 +72,16 @@ export function AuthProvider({ children }) {
 		const url =
 			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/login";
 
+		// const url =
+		// 	"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread";
+
 		return axios
 			.post(url, data)
 			.then((res) => {
 				let user = {
-					email: res.data.email,
+					userId: res.data.userId,
 					password: res.data.password,
+					email: email,
 				};
 				setUserCookie(user);
 				setCurrentUser(user);

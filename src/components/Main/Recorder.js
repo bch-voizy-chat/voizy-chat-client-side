@@ -17,8 +17,6 @@ import NewAudioRecorder from "../Main/NewAudioRecorder";
 import NewAudioPlayback from "../Main/NewAudioPlayback";
 
 import styles from "../../recorder.module.css";
-import "react-h5-audio-player/lib/styles.css";
-import "../../audio-player-customization.css";
 
 const audioType = "audio/*";
 
@@ -34,8 +32,6 @@ class Recorder extends Component {
 			mic_access_granted: false,
 			medianotFound: false,
 			audios: [],
-			audio_title: "",
-			audio_tags: [],
 			audioBlob: null,
 			mimeTypeToUseWhenRecording: `audio/webm`,
 			recordedChunks: null,
@@ -65,9 +61,7 @@ class Recorder extends Component {
 	}
 
 	startTimer() {
-		//if (this.timer === 0 && this.state.seconds > 0) {
 		this.timer = setInterval(this.countDown, 1000);
-		//}
 	}
 
 	countDown() {
@@ -93,8 +87,6 @@ class Recorder extends Component {
 		return obj;
 	}
 
-	async componentDidMount() {}
-
 	checkMicPermissionBeforeStart() {
 		navigator.getUserMedia =
 			navigator.getUserMedia ||
@@ -108,7 +100,6 @@ class Recorder extends Component {
 					this.setState({ localStream: stream });
 					if (typeof stream === "object") {
 						this.setState({ mic_access_granted: true });
-						console.log(`mic_access_granted is true`);
 					}
 					if (this.state.mimeTypeToUseWhenRecording) {
 						this.mediaRecorder = new MediaRecorder(stream, {
@@ -117,7 +108,7 @@ class Recorder extends Component {
 					} else {
 						this.mediaRecorder = new MediaRecorder(stream);
 					}
-					this.state.recordedChunks = [];
+					this.setState({ recordedChunks: [] });
 					this.mediaRecorder.ondataavailable = (e) => {
 						if (e.data && e.data.size > 0) {
 							this.state.recordedChunks.push(e.data);
@@ -125,7 +116,6 @@ class Recorder extends Component {
 					};
 					// wipe old data chunks
 					this.setState({ recordedChunks: [] });
-					// this.state.recordedChunks = [];
 					// start recorder with 10ms buffer
 					this.mediaRecorder.start(0);
 					this.startTimer();
@@ -140,10 +130,6 @@ class Recorder extends Component {
 		} else {
 			this.setState({ medianotFound: true });
 			this.setState({ mic_access_granted: false });
-			console.log("mic denied");
-			/* 			console.log(
-				"Media Decives will work only with SSL and if the user grants access to the device microphone..."
-			); */
 		}
 	}
 
@@ -178,19 +164,6 @@ class Recorder extends Component {
 			chunks: this.state.recordedChunks,
 			duration: this.state.time,
 		});
-	}
-
-	saveAudioDetails(audioTitle, audioTags) {
-		let a_title = "";
-		let a_tags = [];
-
-		this.setState(
-			{
-				audio_title: { a_title },
-				audio_tags: { a_tags },
-			},
-			() => {}
-		);
 	}
 
 	handleReset(e) {
@@ -238,6 +211,10 @@ class Recorder extends Component {
 							audios={this.state.audios}
 							handleReset={this.handleReset}
 							handleAudioUpload={this.handleAudioUpload}
+							setAudioTags={this.props.setAudioTags}
+							setAudioTitle={this.props.setAudioTitle}
+							isComment={this.props.isComment}
+							isLoading={this.props.isLoading}
 						/>
 					)}
 				</div>

@@ -19,6 +19,10 @@ const Login = (props) => {
 						Your account has been successfully created. You may now login.
 					</Alert>
 				);
+			case 300:
+				return (
+					<Alert variant='success'>You have successfully logged out.</Alert>
+				);
 
 			case 400:
 				return (
