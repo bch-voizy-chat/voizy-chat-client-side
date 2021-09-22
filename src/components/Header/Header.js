@@ -16,6 +16,7 @@ const Header = () => {
 			pathname: "/login",
 			state: { message: "user logged out", status: 300 },
 		});
+		window.location.reload();
 	};
 
 	return (
