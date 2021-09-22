@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import * as Cookies from "js-cookie";
 import axios from "axios";
 
+const baseUrl = "https://us-central1-voizy-chat.cloudfunctions.net/voizyChat";
+
 const setUserCookie = (user) => {
 	Cookies.remove("user");
 	Cookies.set("user", user, { expires: 14 });
@@ -39,8 +41,7 @@ export function AuthProvider({ children }) {
 			username: username,
 		};
 		/** server signup url */
-		const url =
-			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/signup";
+		const url = baseUrl + "/signup";
 
 		return axios
 			.post(url, data)
@@ -69,11 +70,7 @@ export function AuthProvider({ children }) {
 			password: password,
 		};
 		/** server login url */
-		const url =
-			"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/login";
-
-		// const url =
-		// 	"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread";
+		const url = baseUrl + "/login";
 
 		return axios
 			.post(url, data)
