@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
+import { Link, useLocation, useHistory } from "react-router-dom";
 
 import PlayerComponent from "./PlayerComponent";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { formatDate, formatTags } from "../../utils/utils";
 
 const Thread = ({ thread }) => {
 	const { currentUser, isLoggedIn } = useAuth();
@@ -55,24 +56,6 @@ const Thread = ({ thread }) => {
 	let likeBtnClass = `d-flex align-items-center btn-text squishy thread__icon thread__icon--like ${
 		like && "liked"
 	}`;
-
-	const formatTags = (tags) => {
-		let tagStr = "";
-		tags.forEach((tag) => {
-			tagStr += "#" + tag.replaceAll(" ", "-") + " ";
-		});
-		return tagStr;
-	};
-
-	const formatDate = (date) => {
-		let d = new Date(date);
-		let ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
-		let mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
-		let da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
-		let hr = d.getHours();
-		let min = d.getMinutes().toString().padStart(2, "0");
-		return `${da}/${mo}/${ye}, ${hr}:${min}`;
-	};
 
 	const shareData = {
 		title: "Thread title",
