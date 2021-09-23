@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import axios from "axios";
 
 import Thread from "../components/Main/Thread";
 import Comment from "../components/Main/Comment";
+import apiServices from "../services/api";
 
 const SingleThread = () => {
 	const { threadId } = useParams();
-
 	const [thread, setThread] = useState({
 		threadAudioPath: "",
 		threadId: "",
@@ -21,15 +20,9 @@ const SingleThread = () => {
 	const [comments, setComments] = useState([]);
 
 	const fetchData = async (threadId) => {
-		try {
-			let res = await axios.get(
-				`https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/threads/${threadId}`
-			);
-			setComments(res.data.responses);
-			setThread(res.data.thread);
-		} catch (err) {
-			console.log(err);
-		}
+		const res = await apiServices.getThread(threadId);
+		setComments(res.responses);
+		setThread(res.thread);
 	};
 
 	useEffect(() => {

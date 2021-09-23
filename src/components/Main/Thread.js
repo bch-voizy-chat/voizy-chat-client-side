@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Link, useLocation, useHistory } from "react-router-dom";
 
 import PlayerComponent from "./PlayerComponent";
 import { useAuth } from "../../contexts/AuthContext";
 import { formatDate, formatTags } from "../../utils/utils";
+import apiServices from "../../services/api";
 
 const Thread = ({ thread }) => {
 	const { currentUser, isLoggedIn } = useAuth();
@@ -13,7 +13,6 @@ const Thread = ({ thread }) => {
 
 	const storedLike = localStorage.getItem(`${thread.threadId} liked`);
 	const [like, setLike] = useState(storedLike);
-
 	const [likeCount, setLikeCount] = useState(thread.threadLikes);
 
 	useEffect(() => {
@@ -37,17 +36,12 @@ const Thread = ({ thread }) => {
 			setLikeCount(likeCount + 1);
 			/** Post update */
 			if (!storedLike) {
-				const threadLikeUrl =
-					"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/likeThread";
 				const data = {
 					userid: currentUser.userId,
 					password: currentUser.password,
 					threadId: thread.threadId,
 				};
-				axios
-					.post(threadLikeUrl, data)
-					.then((res) => console.log(res))
-					.catch((err) => console.log(err));
+				apiServices.likeThread(data);
 				localStorage.setItem(`${thread.threadId} liked`, true);
 			}
 		}
@@ -57,11 +51,6 @@ const Thread = ({ thread }) => {
 		like && "liked"
 	}`;
 
-	const shareData = {
-		title: thread.threadTitle,
-		text: `Listen to what ${thread.threadPosterUserName} has to say`,
-		url: `/conversation/${thread.threadId}`,
-	};
 	const shareHandler = async () => {
 		if (!isLoggedIn) {
 			history.push({
@@ -69,6 +58,11 @@ const Thread = ({ thread }) => {
 				state: { message: "user not logged in", status: 400 },
 			});
 		} else {
+			const shareData = {
+				title: thread.threadTitle,
+				text: `Listen to what ${thread.threadPosterUserName} has to say`,
+				url: `/conversation/${thread.threadId}`,
+			};
 			try {
 				await navigator.share(shareData);
 			} catch (err) {

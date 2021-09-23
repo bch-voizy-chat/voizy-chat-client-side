@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 import Thread from "../components/Main/Thread";
+import apiServices from "../services/api";
 
 const Home = () => {
 	const [threads, setThreads] = useState([]);
 	const fetchData = async () => {
-		try {
-			let res = await axios.get(
-				"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/threads"
-			);
-			setThreads(res.data);
-		} catch (err) {
-			console.log(err);
-		}
+		const res = await apiServices.getAllThreads();
+		setThreads(res);
 	};
 
 	useEffect(() => {

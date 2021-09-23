@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useHistory } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { formatDate } from "../../utils/utils";
 import PlayerComponent from "./PlayerComponent";
+import apiServices from "../../services/api";
 
 const Comment = ({ response }) => {
 	const { currentUser, isLoggedIn } = useAuth();
@@ -29,18 +29,13 @@ const Comment = ({ response }) => {
 			setLikeCount(likeCount + 1);
 			/** Post update */
 			if (!storedLike) {
-				const responseLikeUrl =
-					"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/likeResponse";
 				const data = {
 					userid: currentUser.userId,
 					password: currentUser.password,
 					threadId: response.responseToThreadId,
 					responseId: response.responseId,
 				};
-				axios
-					.post(responseLikeUrl, data)
-					.then((res) => console.log(res))
-					.catch((err) => console.log(err));
+				apiServices.likeResponse(data);
 				localStorage.setItem(`${response.responseId} liked`, true);
 			}
 		}
