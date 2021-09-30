@@ -25,9 +25,13 @@ const Home = () => {
 
 	const showData = () => {
 		setTimeout(() => {
-			setThreads([...threads, ...chunks[counter]]);
-			setCounter(counter + 1);
-			if (counter === chunks.length - 1) setHasMore(false);
+			if (counter === chunks.length - 1) {
+				setHasMore(false);
+				setCounter(0);
+			} else {
+				setThreads([...threads, ...chunks[counter]]);
+				setCounter(counter + 1);
+			}
 		}, 800);
 	};
 
