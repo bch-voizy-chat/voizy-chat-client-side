@@ -10,7 +10,7 @@ const Home = () => {
 	const [threads, setThreads] = useState([]);
 	const [chunks, setChunks] = useState([]);
 	const [hasMore, setHasMore] = useState(true);
-	const [counter, setCounter] = useState(0);
+	const [counter, setCounter] = useState(1);
 	const chunkSize = 5;
 
 	useEffect(() => {
@@ -18,17 +18,16 @@ const Home = () => {
 			const res = await apiServices.getAllThreads();
 			const threadChunks = chunk(res, chunkSize);
 			setChunks(threadChunks);
-			setThreads(threadChunks[counter]);
-			setCounter(counter + 1);
+			setThreads(threadChunks[0]);
 		};
 		fetchData();
-	}, [counter]);
+	}, []);
 
 	const showData = () => {
 		setTimeout(() => {
 			setThreads([...threads, ...chunks[counter]]);
-			if (chunks[counter].length < chunkSize) setHasMore(false);
 			setCounter(counter + 1);
+			if (counter === chunks.length - 1) setHasMore(false);
 		}, 800);
 	};
 
