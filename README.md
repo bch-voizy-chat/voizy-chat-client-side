@@ -1,6 +1,6 @@
 # Voizy Chat
 
-This React App is the product of the Summer Project for the Full Stack Web Development Program at [Business College Helsinki](//en.bc.fi/qualifications/full-stack-web-developer-program/).
+This React App is the product of the Summer Project for the Full Stack Web Development Program at [Business College Helsinki](//en.bc.fi/qualifications/full-stack-web-developer-program/). You can see the [live demo here](//voizy-chat.web.app/)
 
 ## Technologies used
 

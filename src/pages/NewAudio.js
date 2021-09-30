@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 import Recorder from "../components/Main/Recorder";
 import { useHistory } from "react-router";
+import apiServices from "../services/api";
 
 const NewAudio = (props) => {
 	const { currentUser } = useAuth();
@@ -29,11 +30,11 @@ const NewAudio = (props) => {
 		},
 	});
 
-	function handleAudioStop(data) {
+	const handleAudioStop = (data) => {
 		setAudioDetails(data);
-	}
+	};
 
-	function handleAudioUpload() {
+	const handleAudioUpload = async () => {
 		setIsLoading(true);
 		// POST endpoint
 		let targetUrl;
@@ -49,18 +50,14 @@ const NewAudio = (props) => {
 		const formData = new FormData();
 
 		if (isComment) {
-			targetUrl =
-				"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addresponse";
-
+			targetUrl = "/addresponse";
 			// Addition of data to the FormData object
 			formData.append("file", audioDetails.blob, audioFileName + ".ogg");
 			formData.append("userid", currentUser.userId);
 			formData.append("password", currentUser.password);
 			formData.append("threadId", threadId);
 		} else {
-			targetUrl =
-				"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/addthread";
-
+			targetUrl = "/addthread";
 			// Addition of data to the FormData object
 			formData.append("file", audioDetails.blob, audioFileName + ".ogg");
 			formData.append("userid", currentUser.userId);
@@ -68,25 +65,17 @@ const NewAudio = (props) => {
 			formData.append("threadtags", JSON.stringify(audioTags));
 			formData.append("threadTitle", audioTitle);
 		}
+		let res = await apiServices.postAudio(targetUrl, formData);
+		if (res.status === 201) {
+			setIsLoading(false);
+			history.push("/");
+		} else {
+			setIsLoading(false);
+			alert("Oops! Something went wrong. Please try again.");
+		}
+	};
 
-		fetch(targetUrl, {
-			method: "POST",
-			body: formData,
-		})
-			.then((response) => response.json())
-			.then((result) => {
-				console.log("Success:", result);
-				setIsLoading(false);
-				history.push("/");
-			})
-			.catch((error) => {
-				console.error("Error:", error);
-				setIsLoading(false);
-				alert("Oops! Something went wrong. Please try again.");
-			});
-	}
-
-	function handleReset() {
+	const handleReset = () => {
 		const reset = {
 			url: null,
 			blob: null,
@@ -98,7 +87,7 @@ const NewAudio = (props) => {
 			},
 		};
 		setAudioDetails(reset);
-	}
+	};
 
 	return (
 		<div>

@@ -1,23 +1,14 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useAuth } from "../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 
+import { useAuth } from "../../contexts/AuthContext";
+import { formatDate } from "../../utils/utils";
 import PlayerComponent from "./PlayerComponent";
+import apiServices from "../../services/api";
 
 const Comment = ({ response }) => {
 	const { currentUser, isLoggedIn } = useAuth();
 	const history = useHistory();
-
-	const formatDate = (date) => {
-		let d = new Date(date);
-		let ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
-		let mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
-		let da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
-		let hr = d.getHours();
-		let min = d.getMinutes().toString().padStart(2, "0");
-		return `${da}/${mo}/${ye}, ${hr}:${min}`;
-	};
 
 	const storedLike = localStorage.getItem(`${response.responseId} liked`);
 
@@ -38,18 +29,13 @@ const Comment = ({ response }) => {
 			setLikeCount(likeCount + 1);
 			/** Post update */
 			if (!storedLike) {
-				const responseLikeUrl =
-					"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/likeResponse";
 				const data = {
 					userid: currentUser.userId,
 					password: currentUser.password,
 					threadId: response.responseToThreadId,
 					responseId: response.responseId,
 				};
-				axios
-					.post(responseLikeUrl, data)
-					.then((res) => console.log(res))
-					.catch((err) => console.log(err));
+				apiServices.likeResponse(data);
 				localStorage.setItem(`${response.responseId} liked`, true);
 			}
 		}

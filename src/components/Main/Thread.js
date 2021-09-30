@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-import axios from "axios";
+import { Link, useLocation, useHistory } from "react-router-dom";
 
 import PlayerComponent from "./PlayerComponent";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { formatDate, formatTags } from "../../utils/utils";
+import apiServices from "../../services/api";
 
 const Thread = ({ thread }) => {
 	const { currentUser, isLoggedIn } = useAuth();
@@ -12,7 +13,6 @@ const Thread = ({ thread }) => {
 
 	const storedLike = localStorage.getItem(`${thread.threadId} liked`);
 	const [like, setLike] = useState(storedLike);
-
 	const [likeCount, setLikeCount] = useState(thread.threadLikes);
 
 	useEffect(() => {
@@ -36,17 +36,12 @@ const Thread = ({ thread }) => {
 			setLikeCount(likeCount + 1);
 			/** Post update */
 			if (!storedLike) {
-				const threadLikeUrl =
-					"https://us-central1-voizy-chat.cloudfunctions.net/voizyChat/likeThread";
 				const data = {
 					userid: currentUser.userId,
 					password: currentUser.password,
 					threadId: thread.threadId,
 				};
-				axios
-					.post(threadLikeUrl, data)
-					.then((res) => console.log(res))
-					.catch((err) => console.log(err));
+				apiServices.likeThread(data);
 				localStorage.setItem(`${thread.threadId} liked`, true);
 			}
 		}
@@ -56,29 +51,6 @@ const Thread = ({ thread }) => {
 		like && "liked"
 	}`;
 
-	const formatTags = (tags) => {
-		let tagStr = "";
-		tags.forEach((tag) => {
-			tagStr += "#" + tag.replaceAll(" ", "-") + " ";
-		});
-		return tagStr;
-	};
-
-	const formatDate = (date) => {
-		let d = new Date(date);
-		let ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
-		let mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
-		let da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
-		let hr = d.getHours();
-		let min = d.getMinutes().toString().padStart(2, "0");
-		return `${da}/${mo}/${ye}, ${hr}:${min}`;
-	};
-
-	const shareData = {
-		title: thread.threadTitle,
-		text: `Listen to what ${thread.threadPosterUserName} has to say`,
-		url: `/conversation/${thread.threadId}`,
-	};
 	const shareHandler = async () => {
 		if (!isLoggedIn) {
 			history.push({
@@ -86,6 +58,11 @@ const Thread = ({ thread }) => {
 				state: { message: "user not logged in", status: 400 },
 			});
 		} else {
+			const shareData = {
+				title: thread.threadTitle,
+				text: `Listen to what ${thread.threadPosterUserName} has to say`,
+				url: `/conversation/${thread.threadId}`,
+			};
 			try {
 				await navigator.share(shareData);
 			} catch (err) {

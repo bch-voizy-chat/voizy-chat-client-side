@@ -11,7 +11,7 @@ const Login = (props) => {
 	const history = useHistory();
 	const { login } = useAuth();
 
-	const redirectHandler = () => {
+	const handleRedirect = () => {
 		switch (props.location.state.status) {
 			case 200:
 				return (
@@ -47,7 +47,7 @@ const Login = (props) => {
 			className='flow d-flex flex-column mx-auto pt-5'
 			style={{ maxWidth: "320px" }}
 		>
-			{props.location.state && redirectHandler()}
+			{props.location.state && handleRedirect()}
 			<h2 className='text-center'>Log in:</h2>
 			<Form className='flow form-flow' onSubmit={handleSubmit}>
 				<Form.Group id='email'>
