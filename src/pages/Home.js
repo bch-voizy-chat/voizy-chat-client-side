@@ -13,17 +13,16 @@ const Home = () => {
 	const [counter, setCounter] = useState(0);
 	const chunkSize = 5;
 
-	const fetchData = async () => {
-		const res = await apiServices.getAllThreads();
-		const threadChunks = chunk(res, chunkSize);
-		setChunks(threadChunks);
-		setThreads(threadChunks[counter]);
-		setCounter(counter + 1);
-	};
-
 	useEffect(() => {
+		const fetchData = async () => {
+			const res = await apiServices.getAllThreads();
+			const threadChunks = chunk(res, chunkSize);
+			setChunks(threadChunks);
+			setThreads(threadChunks[counter]);
+			setCounter(counter + 1);
+		};
 		fetchData();
-	}, []);
+	}, [counter]);
 
 	const showData = () => {
 		setTimeout(() => {
