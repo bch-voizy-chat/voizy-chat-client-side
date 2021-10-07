@@ -39,7 +39,7 @@ class Recorder extends Component {
 		};
 		this.timer = 0;
 		this.startTimer = this.startTimer.bind(this);
-		this.countDown = this.countDown.bind(this);
+		this.counter = this.counter.bind(this);
 		this.checkMicPermissionBeforeStart =
 			this.checkMicPermissionBeforeStart.bind(this);
 		this.stopRecording = this.stopRecording.bind(this);
@@ -61,12 +61,13 @@ class Recorder extends Component {
 	}
 
 	startTimer() {
-		this.timer = setInterval(this.countDown, 1000);
+		this.timer = setInterval(this.counter, 1000);
 	}
 
-	countDown() {
-		// Remove one second, set state so a re-render happens.
+	counter() {
+		// Add one second, set state so a re-render happens.
 		let seconds = this.state.seconds + 1;
+		if (seconds > 30) this.stopRecording();
 		this.setState({
 			time: this.secondsToTime(seconds),
 			seconds: seconds,
