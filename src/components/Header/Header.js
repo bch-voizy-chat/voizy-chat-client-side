@@ -38,6 +38,13 @@ const Header = () => {
 				/>
 				<Navbar.Collapse id='responsive-navbar-nav'>
 					<Nav className='mr-auto'>
+						<NavLink
+							to='/about'
+							className='voizy-nav-link focus-visible-only'
+							onClick={() => setExpanded(false)}
+						>
+							About
+						</NavLink>
 						{isLoggedIn ? (
 							<>
 								<NavLink
