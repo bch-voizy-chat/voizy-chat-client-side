@@ -27,10 +27,14 @@ const PlayerComponent = ({ audioPath }) => {
 				customVolumeControls={[]}
 				showJumpControls={false}
 				layout='horizontal-reverse'
+				preload = 'auto' // Testing 'metadata' compared to 'auto'
+				defaultDuration = '00:30' // This can be used if metadata (lenght) is not loaded correctly.
 				customProgressBarSection={[
+					RHAP_UI.DURATION,
+					<div>/</div>,
 					RHAP_UI.CURRENT_TIME,
 					RHAP_UI.PROGRESS_BAR,
-					RHAP_UI.CURRENT_LEFT_TIME,
+					// RHAP_UI.CURRENT_LEFT_TIME,
 				]}
 			/>
 		</div>
