@@ -4,7 +4,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import Thread from "../components/Main/Thread";
 import apiServices from "../services/api";
-import { chunk } from "../utils/utils";
+import { chunk, sortThreads } from "../utils/utils";
 
 const Home = () => {
 	const [threads, setThreads] = useState([]);
@@ -16,7 +16,8 @@ const Home = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const res = await apiServices.getAllThreads();
-			const threadChunks = chunk(res, chunkSize);
+			const sortedThreads = sortThreads(res);
+			const threadChunks = chunk(sortedThreads, chunkSize);
 			setChunks(threadChunks);
 			setThreads(threadChunks[0]);
 		};
