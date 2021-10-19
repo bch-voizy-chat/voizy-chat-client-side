@@ -17,53 +17,10 @@ const About = () => {
 				</a>{" "}
 				at Business College Helsinki.
 			</p>
-			<h3>Team</h3>
-			<ul>
-				<li>
-					<p>
-						Team Lead: Alfonso Ortiz Palma Junco
-						<ul>
-							<li>
-								GitHub <a href='https://github.com/aortizpalma'>@aortizpalma</a>
-							</li>
-							<li>
-								<span className='visually-hidden'>Alfonso's </span>
-								<a href='https://www.linkedin.com/in/ortizpalma/'>LinkedIn</a>
-							</li>
-						</ul>
-					</p>
-				</li>
-				<li>
-					<p>
-						Back End Lead: Alireza Keshmiry
-						<ul>
-							<li>
-								GitHub <a href='https://github.com/ark13da'>@ark13da</a>
-							</li>
-							<li>
-								<a href='https://www.linkedin.com/in/alireza-keshmiry-63193979/'>
-									<span className='visually-hidden'>Alireza's </span>LinkedIn
-								</a>
-							</li>
-						</ul>
-					</p>
-				</li>
-				<li>
-					<p>
-						Front End Lead: Laurie Lim Sam
-						<ul>
-							<li>
-								GitHub <a href='https://github.com/laurielim'>@laurielim</a>
-							</li>
-							<li>
-								<a href='https://www.linkedin.com/in/margittennosaar/'>
-									<span className='visually-hidden'>Laurie's </span>LinkedIn
-								</a>
-							</li>
-						</ul>
-					</p>
-				</li>
-			</ul>
+			<p>
+				If you have any comment or feedback, please reach out to{" "}
+				<a href='mailto:hello@voizyapp.com'>hello@voizyapp.com</a>
+			</p>
 		</div>
 	);
 };
