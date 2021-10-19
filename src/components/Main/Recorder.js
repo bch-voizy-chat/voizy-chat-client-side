@@ -15,6 +15,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import React, { Component } from "react";
 import NewAudioRecorder from "../Main/NewAudioRecorder";
 import NewAudioPlayback from "../Main/NewAudioPlayback";
+import ysFixWebmDuration from "fix-webm-duration";
 
 import styles from "../../recorder.module.css";
 
@@ -151,17 +152,22 @@ class Recorder extends Component {
 		this.setState({ recorded: true });
 	}
 
-	saveAudio() {
+	async saveAudio() {
 		// convert saved chunks to blob
 		const blob = new Blob(this.state.recordedChunks, { type: audioType });
 		// generate video url from blob
-		const audioURL = window.URL.createObjectURL(blob);
+
+		const durationMs = this.state.seconds * 1000;
+
+		const fixedBlob = await ysFixWebmDuration(blob, durationMs, {logger: false});
+
+		const audioURL = window.URL.createObjectURL(fixedBlob);
 		// append videoURL to list of saved videos for rendering
 		const audios = [audioURL];
-		this.setState({ audios, audioBlob: blob });
+		this.setState({ audios, audioBlob: fixedBlob });
 		this.props.handleAudioStop({
 			url: audioURL,
-			blob: blob,
+			blob: fixedBlob,
 			chunks: this.state.recordedChunks,
 			duration: this.state.time,
 		});

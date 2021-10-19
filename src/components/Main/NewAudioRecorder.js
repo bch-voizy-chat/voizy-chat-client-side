@@ -1,3 +1,4 @@
+
 import React from "react";
 import styles from "../../recorder.module.css";
 
@@ -81,5 +82,6 @@ const NewAudioRecorder = ({
 		</>
 	);
 };
+
 
 export default NewAudioRecorder;
