@@ -177,6 +177,7 @@ ul {
   border-bottom: 0.2rem solid #ddd;
 }
 
+.about-page,
 .audio-container > * {
   padding: 0 5%;
 }
