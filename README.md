@@ -44,7 +44,7 @@ Back End Lead: Alireza Keshmiry
 Front End Lead: Laurie Lim Sam
 
 - GitHub [@laurielim](//github.com/laurielim)
-- [LinkedIn](//www.linkedin.com/in/margittennosaar/)
+- [LinkedIn](//www.linkedin.com/in/laurielim/)
 
 Mentor: Margit Tennosaar
 
